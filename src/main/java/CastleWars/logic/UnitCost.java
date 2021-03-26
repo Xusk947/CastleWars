@@ -18,9 +18,9 @@ public class UnitCost {
         logic = logicc;
         // Ground
         cost.put(UnitTypes.dagger, 25);
-        cost.put(UnitTypes.mace, 50);
-        cost.put(UnitTypes.fortress, 75);
-        cost.put(UnitTypes.scepter, 700);
+        cost.put(UnitTypes.mace, 70);
+        cost.put(UnitTypes.fortress, 170);
+        cost.put(UnitTypes.scepter, 1200);
         cost.put(UnitTypes.reign, 4000);
         // Support
         cost.put(UnitTypes.nova, 30);
@@ -30,9 +30,9 @@ public class UnitCost {
         cost.put(UnitTypes.corvus, 3000);
         // Spider
         cost.put(UnitTypes.crawler, 15);
-        cost.put(UnitTypes.atrax, 55);
-        cost.put(UnitTypes.spiroct, 80);
-        cost.put(UnitTypes.arkyid, 800);
+        cost.put(UnitTypes.atrax, 80);
+        cost.put(UnitTypes.spiroct, 120);
+        cost.put(UnitTypes.arkyid, 1500);
         cost.put(UnitTypes.toxopid, 7000);
         
         Events.on(EventType.UnitDestroyEvent.class, event -> {

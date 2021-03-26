@@ -53,15 +53,13 @@ public class Generator implements Cons<Tiles> {
         Team[] t = new Team[]{Team.sharded, Team.blue};
 
         tiles.getn(sx, sy).setBlock(Blocks.coreShard, Team.sharded);
-        tiles.getn(sx, by).setOverlay(Blocks.spawn);
 
         tiles.getn(bx, by).setBlock(Blocks.coreShard, Team.blue);
-        tiles.getn(bx, sy).setOverlay(Blocks.spawn);
 
         for (Team team : t) {
             Seq<UnitRoom> s = new Seq<>();
             for (UnitRoom room : UnitRoom.rooms) {
-                int xx = (team == Team.blue ? bx : sx) + room.getX();
+                int xx = (team == Team.blue ? bx : sx) + (team == Team.blue ? -room.getX() : room.getX());
                 int yy = (team == Team.blue ? by : sy) + room.getY();
                 for (int x = -Room.ROOM_SIZE; x <= Room.ROOM_SIZE; x++) {
                     for (int y = -Room.ROOM_SIZE; y <= Room.ROOM_SIZE; y++) {
@@ -71,6 +69,7 @@ public class Generator implements Cons<Tiles> {
                             floor = (Floor) Blocks.space;
                         }
                         tiles.getn(xx + x, yy + y).setFloor(floor);
+                        tiles.getn(xx + x, yy + y).setBlock(Blocks.air);
                     }
                 }
                 UnitRoom room1 = new UnitRoom(xx, yy, room.unitType, room.classType, room.cost, room.income);
