@@ -17,15 +17,15 @@ public class Room {
         new Room(-2 * PUDDLE, 0, UnitTypes.arkyid, ClassType.Attacker, 1800),
         new Room(-1 * PUDDLE, -1 * PUDDLE, UnitTypes.dagger, ClassType.Attacker, 100),
         new Room(-1 * PUDDLE, 0, UnitTypes.nova, ClassType.Attacker, 120),
-        new Room(-1 * PUDDLE, PUDDLE, UnitTypes.pulsar, ClassType.Attacker, 120),
-        new Room(0 * PUDDLE, PUDDLE, UnitTypes.fortress, ClassType.Attacker, 120),
+        new Room(-1 * PUDDLE, PUDDLE, UnitTypes.pulsar, ClassType.Attacker, 380),
+        new Room(0 * PUDDLE, PUDDLE, UnitTypes.fortress, ClassType.Attacker, 500),
         new Room(0 * PUDDLE, PUDDLE * 2, UnitTypes.scepter, ClassType.Attacker, 1500),
         new Room(0 * PUDDLE, PUDDLE * -2, UnitTypes.vela, ClassType.Defender, 2000),
         new Room(0 * PUDDLE, -1 * PUDDLE, UnitTypes.dagger, ClassType.Defender, 120),
         new Room(2 * PUDDLE, 0, UnitTypes.quasar, ClassType.Defender, 580),
-        new Room(1 * PUDDLE, PUDDLE, UnitTypes.dagger, ClassType.Defender, 120),
+        new Room(1 * PUDDLE, PUDDLE, UnitTypes.spiroct, ClassType.Defender, 360),
         new Room(1 * PUDDLE, 0, UnitTypes.fortress, ClassType.Defender, 120),
-        new Room(1 * PUDDLE, -1 * PUDDLE, UnitTypes.dagger, ClassType.Defender, 120),});
+        new Room(1 * PUDDLE, -1 * PUDDLE, UnitTypes.atrax, ClassType.Defender, 240),});
 
     private final int x, y;
     public float drawx, drawy, endDrawx, endDrawy, centreDrawx, centreDrawy;

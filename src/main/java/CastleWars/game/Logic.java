@@ -99,7 +99,7 @@ public class Logic {
 
         datas.forEach(data -> {
             if (interval.get(0, SEC_TIMER)) {
-                data.money += 50;
+                data.money += 20;
             }
             StringBuilder hud = new StringBuilder();
             hud.append("[gray]Time remain: ").append(Mathf.floor(endTimer / 60f)).append("\n");
