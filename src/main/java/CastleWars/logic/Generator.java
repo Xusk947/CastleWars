@@ -3,7 +3,6 @@ package CastleWars.logic;
 import arc.func.Cons;
 import arc.struct.IntMap;
 import arc.struct.Seq;
-import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.game.Team;
 import mindustry.world.Block;
