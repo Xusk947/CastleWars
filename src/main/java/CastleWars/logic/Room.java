@@ -21,8 +21,8 @@ public class Room {
         new Room(0 * PUDDLE, PUDDLE, UnitTypes.fortress, ClassType.Attacker, 500),
         new Room(0 * PUDDLE, PUDDLE * 2, UnitTypes.scepter, ClassType.Attacker, 1500),
         new Room(0 * PUDDLE, PUDDLE * -2, UnitTypes.toxopid, ClassType.Attacker, 7000),
-        new Room(0 * PUDDLE, -1 * PUDDLE, UnitTypes.dagger, ClassType.Defender, 80),
-        new Room(2 * PUDDLE, 0, UnitTypes.quasar, ClassType.Defender, 580),
+        new Room(0 * PUDDLE, -1 * PUDDLE, UnitTypes.quasar, ClassType.Defender, 580),
+        new Room(2 * PUDDLE, 0, UnitTypes.dagger, ClassType.Defender, 80),
         new Room(1 * PUDDLE, PUDDLE, UnitTypes.spiroct, ClassType.Defender, 360),
         new Room(1 * PUDDLE, 0, UnitTypes.fortress, ClassType.Defender, 350),
         new Room(1 * PUDDLE, -1 * PUDDLE, UnitTypes.atrax, ClassType.Defender, 120),});

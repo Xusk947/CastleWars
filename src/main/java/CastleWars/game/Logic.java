@@ -116,7 +116,7 @@ public class Logic {
                 for (Room room : rooms1.value) {
                     datas.forEach(data -> {
                         if (data.player.team() == room.team) {
-                            Call.label(data.player.con, "[accent]" + room.unitType + " [white]: [accent]" + room.classType + "\n[orange]cost: [white]" + room.cost, SEC_TIMER * 10 / 60f, room.centreDrawx, room.centreDrawy);
+                            Call.label(data.player.con, "[orange]" + room.classType + "\n[accent]cost: [white]" + room.cost, SEC_TIMER * 10 / 60f, room.centreDrawx, room.centreDrawy - Vars.tilesize * (Room.ROOM_SIZE + 1));
                         }
                     });
                 }
