@@ -1,5 +1,7 @@
 package CastleWars.logic;
 
+import CastleWars.logic.room.Room;
+import CastleWars.logic.room.UnitRoom;
 import arc.func.Cons;
 import arc.struct.IntMap;
 import arc.struct.Seq;
@@ -14,7 +16,7 @@ public class Generator implements Cons<Tiles> {
 
     public static int MARGIN = 8;
 
-    public IntMap<Seq<Room>> rooms;
+    public IntMap<Seq<UnitRoom>> rooms;
 
     @Override
     public void get(Tiles tiles) {
@@ -57,8 +59,8 @@ public class Generator implements Cons<Tiles> {
         tiles.getn(bx, sy).setOverlay(Blocks.spawn);
 
         for (Team team : t) {
-            Seq<Room> s = new Seq<>();
-            for (Room room : Room.rooms) {
+            Seq<UnitRoom> s = new Seq<>();
+            for (UnitRoom room : UnitRoom.rooms) {
                 int xx = (team == Team.blue ? bx : sx) + room.getX();
                 int yy = (team == Team.blue ? by : sy) + room.getY();
                 for (int x = -Room.ROOM_SIZE; x <= Room.ROOM_SIZE; x++) {
@@ -71,7 +73,7 @@ public class Generator implements Cons<Tiles> {
                         tiles.getn(xx + x, yy + y).setFloor(floor);
                     }
                 }
-                Room room1 = new Room(xx, yy, room.unitType, room.classType, room.cost);
+                UnitRoom room1 = new UnitRoom(xx, yy, room.unitType, room.classType, room.cost, room.income);
                 room1.team = team;
                 s.add(room1);
             }
