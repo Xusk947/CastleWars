@@ -27,7 +27,7 @@ import mindustry.maps.Map;
 
 public class Logic {
 
-    public static float END_TIMER = 60f * 60f * 5f;
+    public static float END_TIMER = 60f * 60f * 10f;
     public static float SEC_TIMER = 60f;
 
     public float endTimer = END_TIMER;
