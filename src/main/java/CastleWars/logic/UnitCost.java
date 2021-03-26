@@ -7,6 +7,7 @@ import mindustry.Vars;
 import mindustry.content.UnitTypes;
 import mindustry.game.EventType;
 import mindustry.game.Team;
+import mindustry.gen.Call;
 import mindustry.type.UnitType;
 
 public class UnitCost {
@@ -39,11 +40,11 @@ public class UnitCost {
                 int bonus = cost.get(event.unit.type);
                 for (PlayerData data : logic.datas) {
                     if (data.player.team() == Team.blue && event.unit.y() > Vars.world.height() * Vars.tilesize / 2) {
-                        //Call.label(data.player.con, "[lime]+" + cost.get(event.unit.type), 1, event.unit.x, event.unit.y);
+                        Call.label(data.player.con, "[lime]+" + cost.get(event.unit.type), 1, event.unit.x, event.unit.y);
                         data.money += bonus;
                     } else if(data.player.team() == Team.sharded && event.unit.y() < Vars.world.height() * Vars.tilesize / 2) {
                         data.money += bonus;
-                        //Call.label(data.player.con, "[lime]+" + cost.get(event.unit.type), 1, event.unit.x, event.unit.y);
+                        Call.label(data.player.con, "[lime]+" + cost.get(event.unit.type), 1, event.unit.x, event.unit.y);
                     }
                 }
             }

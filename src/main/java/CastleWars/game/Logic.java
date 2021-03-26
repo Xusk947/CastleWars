@@ -44,13 +44,12 @@ public class Logic {
         rules = new Rules();
         rules.canGameOver = false;
         rules.waves = true;
-        rules.pvp = true;
         rules.waveTimer = false;
         interval = new Interval(3);
     }
 
     public void update() {
-        if (!seted) {
+        if (!seted || Groups.player.size() < 2) {
             return;
         }
 
@@ -58,6 +57,20 @@ public class Logic {
         if (endTimer <= 0) {
             Call.infoMessage("[gray]|DRAW|");
             Timer.schedule(() -> reset(), 3);
+            seted = false;
+        }
+
+        if (interval.get(0, SEC_TIMER)) {
+            datas.forEach(data -> {
+                data.money += 20;
+            });
+        }
+
+        for (PlayerData data : datas) {
+            StringBuilder hud = new StringBuilder();
+            hud.append("[gray]Time remain: ").append(Mathf.floor(endTimer / 60f)).append("\n");
+            hud.append("[gold]Balance: ").append(data.money);
+            Call.setHudText(data.player.con, hud.toString());
         }
 
         for (IntMap.Entry<Seq<Room>> rooms1 : rooms) {
@@ -97,17 +110,8 @@ public class Logic {
             }
         }
 
-        datas.forEach(data -> {
-            if (interval.get(0, SEC_TIMER)) {
-                data.money += 20;
-            }
-            StringBuilder hud = new StringBuilder();
-            hud.append("[gray]Time remain: ").append(Mathf.floor(endTimer / 60f)).append("\n");
-            hud.append("[gold]Balance: ").append(data.money);
-            Call.setHudText(data.player.con, hud.toString());
-        });
-
-        if (interval.get(1, SEC_TIMER * 10)) {
+        if (interval.get(
+                1, SEC_TIMER * 10)) {
             for (IntMap.Entry<Seq<Room>> rooms1 : rooms) {
                 for (Room room : rooms1.value) {
                     datas.forEach(data -> {
@@ -119,11 +123,13 @@ public class Logic {
             }
         }
 
-        if (Team.sharded.core() == null) {
+        if (Team.sharded.core()
+                == null) {
             Call.infoMessage("[#" + Team.blue.color.toString() + "]|Blue Winners|");
             Timer.schedule(() -> reset(), 3);
             seted = false;
-        } else if (Team.blue.core() == null) {
+        } else if (Team.blue.core()
+                == null) {
             Call.infoMessage("[#" + Team.sharded.color.toString() + "]|Sharded Winners|");
             Timer.schedule(() -> reset(), 3);
             seted = false;
@@ -132,6 +138,9 @@ public class Logic {
     }
 
     public void reset() {
+        for (PlayerData data : datas) {
+            data.money = 0;
+        }
         seted = false;
         endTimer = END_TIMER;
         privateUnits = new Seq<>();
@@ -153,9 +162,6 @@ public class Logic {
 
         for (Player player : players) {
             Vars.netServer.sendWorldData(player);
-        }
-        for (IntMap.Entry<Seq<Room>> room : rooms) {
-            Log.info(room.key + " : " + room.value.size);
         }
         for (Seq<Room> rooms1 : rooms.values()) {
             for (Room room : rooms1) {

@@ -9,6 +9,7 @@ import mindustry.content.Blocks;
 import mindustry.content.UnitTypes;
 import mindustry.game.EventType;
 import mindustry.game.Team;
+import mindustry.gen.Call;
 import mindustry.gen.Groups;
 import mindustry.gen.Nulls;
 import mindustry.gen.Unit;
@@ -26,7 +27,7 @@ public class Main extends Plugin {
         Events.run(EventType.Trigger.update, () -> {
             Groups.unit.each(unit -> {
                 if ((unit.team == Team.sharded && unit.tileY() > Vars.world.height() / 2) || (unit.team == Team.blue && unit.tileY() < Vars.world.height() / 2)) {
-                    unit.set(unit.team().core().x, unit.team().core().y + 3 *Vars.tilesize);
+                    unit.set(unit.team().core().x, unit.team().core().y + 4 *Vars.tilesize);
                     if (unit.isPlayer()) unit.getPlayer().unit(Nulls.unit);
                 }
             });
@@ -34,7 +35,7 @@ public class Main extends Plugin {
                 if (player.unit().spawnedByCore && player.unit().type != UnitTypes.dagger) {
                     if (player.team().core() != null) {
                         Unit unit = UnitTypes.dagger.create(Team.crux);
-                        unit.set(player.team().core().x, player.team().core().y + 3 *Vars.tilesize);
+                        unit.set(player.team().core().x, player.team().core().y + 4 *Vars.tilesize);
                         unit.add();
                         unit.team(player.team());
                         unit.spawnedByCore = true;
@@ -47,6 +48,12 @@ public class Main extends Plugin {
 
         Events.on(EventType.PlayerJoin.class, event -> {
             logic.datas.add(new PlayerData(event.player));
+            if (Groups.player.count(p -> p.team() == Team.sharded) > Groups.player.count(p -> p.team() == Team.blue)) {
+                event.player.team(Team.blue);
+            } else {
+                event.player.team(Team.sharded);
+            }
+            Call.sendMessage(event.player.con, "You in: [#" + event.player.team().color.toString() + "]"+ event.player.team().name + " [white]team", "[sky][Omni]", Nulls.player);
         });
 
         Events.on(EventType.PlayerLeave.class, event -> {
