@@ -44,7 +44,7 @@ public class Logic {
         rules = new Rules();
         rules.canGameOver = false;
         rules.waves = true;
-//        rules.pvp = true;
+        rules.pvp = true;
         rules.waveTimer = false;
         interval = new Interval(3);
     }
