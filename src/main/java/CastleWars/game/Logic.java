@@ -40,6 +40,7 @@ public class Logic {
         rules.canGameOver = false;
         rules.waves = true;
         rules.waveTimer = false;
+        rules.unitCap = 999999;
         interval = new Interval(3);
     }
 
