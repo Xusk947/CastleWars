@@ -27,12 +27,11 @@ public class Main extends Plugin {
         TurretRoom.init();
 
         Events.run(EventType.Trigger.update, () -> {
-            Groups.unit.each(unit -> {
-                if ((unit.team == Team.sharded && unit.tileY() > Vars.world.height() / 2) || (unit.team == Team.blue && unit.tileY() < Vars.world.height() / 2)) {
-                    unit.set(unit.team().core().x, unit.team().core().y + 4 *Vars.tilesize);
-                    if (unit.isPlayer()) unit.getPlayer().unit(Nulls.unit);
-                }
-            });
+            Groups.unit.intersect((Vars.world.height() * Vars.tilesize) / 2, (Vars.world.height() * Vars.tilesize) / 2, 1, 1, unit -> {
+			    unit.set(unit.team().data().core().x, unit.team().data().core().y + 4 * Vars.tilesize);
+			    if (unit.isPlayer()) unit.getPlayer().unit(Nulls.unit);
+		    });
+            
             Groups.player.each(player -> {
                 if (player.unit() != null) {
                     if (player.unit().type == UnitTypes.alpha && player.team().core() != null) {
