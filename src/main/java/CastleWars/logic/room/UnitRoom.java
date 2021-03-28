@@ -40,11 +40,12 @@ public class UnitRoom extends Room {
         new UnitRoom(-1 * PUDDLE, 0 * PUDDLE, UnitTypes.scepter, ClassType.Attacker, 1700, 17),
         new UnitRoom(-1 * PUDDLE, 1 * PUDDLE, UnitTypes.dagger, ClassType.Attacker, 50, 0),
         new UnitRoom(-2 * PUDDLE, 1 * PUDDLE, UnitTypes.mace, ClassType.Attacker, 120, 1),
-        new UnitRoom(-3 * PUDDLE, 1 * PUDDLE, UnitTypes.fortress, ClassType.Attacker, 300, 2),
-        new UnitRoom(-1 * PUDDLE, 2 * PUDDLE, UnitTypes.atrax, ClassType.Attacker, 100, 1),
+        new UnitRoom(-3 * PUDDLE, 1 * PUDDLE, UnitTypes.fortress, ClassType.Attacker, 300, 3),
+        new UnitRoom(-1 * PUDDLE, 2 * PUDDLE, UnitTypes.atrax, ClassType.Attacker, 100, 0),
         new UnitRoom(-2 * PUDDLE, 2 * PUDDLE, UnitTypes.spiroct, ClassType.Attacker, 150, 1),
         new UnitRoom(-3 * PUDDLE, 2 * PUDDLE, UnitTypes.arkyid, ClassType.Attacker, 2200, 20),
         new UnitRoom(-3 * PUDDLE, 0 * PUDDLE, UnitTypes.toxopid, ClassType.Attacker, 7000, 70),
+        new UnitRoom(0, 2 * PUDDLE, UnitTypes.reign, ClassType.Attacker, 5000, 50),
         // Defender
         new UnitRoom(-2 * PUDDLE, 0 * PUDDLE, UnitTypes.scepter, ClassType.Defender, 2000, -25),
         new UnitRoom(-1 * PUDDLE, -1 * PUDDLE, UnitTypes.dagger, ClassType.Defender, 50, 0),
@@ -52,7 +53,8 @@ public class UnitRoom extends Room {
         new UnitRoom(-3 * PUDDLE, -1 * PUDDLE, UnitTypes.fortress, ClassType.Defender, 300, 0),
         new UnitRoom(-1 * PUDDLE, -2 * PUDDLE, UnitTypes.atrax, ClassType.Defender, 100, 0),
         new UnitRoom(-2 * PUDDLE, -2 * PUDDLE, UnitTypes.spiroct, ClassType.Defender, 150, 0),
-        new UnitRoom(-3 * PUDDLE, -2 * PUDDLE, UnitTypes.arkyid, ClassType.Defender, 2200, -20), /*
+        new UnitRoom(-3 * PUDDLE, -2 * PUDDLE, UnitTypes.arkyid, ClassType.Defender, 2200, -20),
+        new UnitRoom(0, -2 * PUDDLE, UnitTypes.reign, ClassType.Defender, 5000, -50)/*
         new UnitRoom(-2 * PUDDLE, 0, UnitTypes.arkyid, ClassType.Attacker, 2200, -20),
         new UnitRoom(-1 * PUDDLE, -1 * PUDDLE, UnitTypes.dagger, ClassType.Attacker, 50, 1),
         new UnitRoom(-1 * PUDDLE, 0, UnitTypes.mace, ClassType.Attacker, 120, 2),
@@ -64,7 +66,8 @@ public class UnitRoom extends Room {
         new UnitRoom(2 * PUDDLE, 0, UnitTypes.dagger, ClassType.Defender, 80, 0),
         new UnitRoom(1 * PUDDLE, PUDDLE, UnitTypes.spiroct, ClassType.Defender, 360, 0),
         new UnitRoom(1 * PUDDLE, 0, UnitTypes.fortress, ClassType.Defender, 350, -1),
-        new UnitRoom(1 * PUDDLE, -1 * PUDDLE, UnitTypes.scepter, ClassType.Defender, 2000, -20),*/});
+        new UnitRoom(1 * PUDDLE, -1 * PUDDLE, UnitTypes.scepter, ClassType.Defender, 2000, -20),*/
+    });
 
     @Override
     public void update() {
