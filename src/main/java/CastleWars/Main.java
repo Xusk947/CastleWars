@@ -92,26 +92,26 @@ public class Main extends Plugin {
 			int amount = 0;
 			try {
 				amount = Integer.parseInt(args[0]);
-                if (amount <= 0) {
-                    player.sendMessage("Invalid payment amount.");
-                }
+				if (amount <= 0) {
+					player.sendMessage("Invalid payment amount.");
+				}
 			} catch (NumberFormatException ignored) {
-                player.sendMessage("Invalid payment amount.");
-                return;
+				player.sendMessage("Invalid payment amount.");
+				return;
 			}
-            
-            //allows for extra output to the player
+
+			//allows for extra output to the player
 			String name = null;
-            //only loop playerdata once instead of using .find twice
+			//only loop playerdata once instead of using .find twice
 			for (PlayerData p : logic.datas) {
 				if (Strings.stripColors(p.player.name).equalsIgnoreCase(args[1])) {
 					name = p.player.name;
 					p.money += amount;
 				} else if (p.player == player) {
-                    p.money -= amount;
+					p.money -= amount;
 				}
 			}
-            player.sendMessage(name != null ? "Successfully sent " + name + " $" + amount : "Could not find " + args[1]);
+			player.sendMessage(name != null ? "Successfully sent " + name + " $" + amount : "Could not find " + args[1]);
 		});
     }
 }
