@@ -3,6 +3,7 @@ package CastleWars;
 import CastleWars.game.Logic;
 import CastleWars.logic.PlayerData;
 import CastleWars.logic.UnitCost;
+import CastleWars.logic.room.TurretRoom;
 import arc.Events;
 import mindustry.Vars;
 import mindustry.content.Blocks;
@@ -23,6 +24,7 @@ public class Main extends Plugin {
     public void init() {
         logic = new Logic();
         UnitCost.init(logic);
+        TurretRoom.init();
 
         Events.run(EventType.Trigger.update, () -> {
             Groups.unit.each(unit -> {
@@ -32,8 +34,8 @@ public class Main extends Plugin {
                 }
             });
             Groups.player.each(player -> {
-                if (player.unit().spawnedByCore && player.unit().type != UnitTypes.dagger) {
-                    if (player.team().core() != null) {
+                if (player.unit() != null) {
+                    if (player.unit().type == UnitTypes.alpha && player.team().core() != null) {
                         Unit unit = UnitTypes.dagger.create(Team.crux);
                         unit.set(player.team().core().x, player.team().core().y + 4 *Vars.tilesize);
                         unit.add();

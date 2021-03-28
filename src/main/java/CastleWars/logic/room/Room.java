@@ -1,11 +1,8 @@
 package CastleWars.logic.room;
 
-import arc.struct.Seq;
+import CastleWars.logic.PlayerData;
 import mindustry.Vars;
-import mindustry.content.Blocks;
 import mindustry.game.Team;
-import mindustry.world.Tiles;
-import mindustry.world.blocks.environment.Floor;
 
 public abstract class Room implements RoomComp {
 
@@ -46,6 +43,11 @@ public abstract class Room implements RoomComp {
     @Override
     public boolean canBuy(int balance) {
         return balance - cost >= 0;
+    }
+
+    @Override
+    public boolean canBuy(PlayerData data) {
+        return data.money - cost > 0;
     }
 
     public enum ClassType {

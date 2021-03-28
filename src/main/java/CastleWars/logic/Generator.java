@@ -6,6 +6,7 @@ import CastleWars.logic.room.UnitRoom;
 import arc.func.Cons;
 import arc.struct.IntMap;
 import arc.struct.Seq;
+import arc.util.Log;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.game.Team;
@@ -46,9 +47,9 @@ public class Generator implements Cons<Tiles> {
         }
 
         // Generate: rooms for cores
-        int sx = tiles.width / 8,
+        int sx = (int) ((float) tiles.width / 7.8f),
                 sy = tiles.height / 4;
-        int bx = tiles.width - tiles.width / 8,
+        int bx = tiles.width - (int) ((float) tiles.width / 7.8f),
                 by = tiles.height - tiles.height / 4;
 
         Team[] t = new Team[]{Team.sharded, Team.blue};
@@ -74,13 +75,13 @@ public class Generator implements Cons<Tiles> {
                     s.add(room2);
                 }
                 if (room instanceof TurretRoom) {
-                    int xx = (team == Team.blue ? Vars.world.width() - room.getX() : room.getX());
-                    int yy = (team == Team.blue ? Vars.world.height() - room.getY() : room.getY());
+                    int xx = (team == Team.blue ? bx : sx) + (team == Team.blue ? -room.getX() : room.getX());
+                    int yy = (team == Team.blue ? by : sy) + room.getY();
                     TurretRoom room1 = (TurretRoom) room;
-                    TurretRoom room2 = new TurretRoom(xx, yy, room1.block);
+                    TurretRoom room2 = new TurretRoom(xx, yy, room1.block, room1.cost);
                     room2.team = team;
                     room2.generate(tiles);
-                    s.add(room);
+                    s.add(room2);
                 }
             }
             rooms.put(team.id, s);

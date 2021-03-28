@@ -1,17 +1,21 @@
 package CastleWars.logic.room;
 
+import static CastleWars.game.Logic.SEC_TIMER;
 import CastleWars.logic.PlayerData;
 import arc.struct.ObjectMap;
 import arc.struct.Seq;
+import arc.util.Log;
 import arc.util.Timer;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.content.Items;
 import mindustry.gen.Building;
 import mindustry.gen.Call;
-import mindustry.gen.Nulls;
+import mindustry.gen.Groups;
+import mindustry.gen.Player;
 import mindustry.type.Item;
 import mindustry.world.Block;
+import mindustry.world.Tile;
 import mindustry.world.Tiles;
 import mindustry.world.blocks.environment.Floor;
 
@@ -21,14 +25,16 @@ public class TurretRoom extends Room {
     public static ObjectMap<Block, Item> items = new ObjectMap<>();
 
     public static Seq<TurretRoom> rooms = new Seq<>(new TurretRoom[]{
-        new TurretRoom(Vars.world.width() / 6, Vars.world.height() / 4 - 10, Blocks.lancer),
-        new TurretRoom(Vars.world.width() / 6, Vars.world.height() / 4, Blocks.ripple),
-        new TurretRoom(Vars.world.width() / 6, Vars.world.height() / 4 + 10, Blocks.lancer)
-    });
+        new TurretRoom(8, 7, Blocks.lancer, 500),
+        new TurretRoom(8, 0, Blocks.ripple, 1500),
+        new TurretRoom(8, -7, Blocks.lancer, 500),
+        new TurretRoom(0, -10, Blocks.foreshadow, 4000),
+        new TurretRoom(0, 10, Blocks.foreshadow, 4000),});
 
     public Block block;
     public Item item = null;
-    public Building build;
+    public Tile tile, itemTile;
+    public boolean buyyed = false;
 
     public static void init() {
         items.put(Blocks.ripple, Items.plastanium);
@@ -36,15 +42,25 @@ public class TurretRoom extends Room {
         items.put(Blocks.foreshadow, Items.surgeAlloy);
         items.put(Blocks.fuse, Items.thorium);
     }
-    
-    public TurretRoom(int x, int y, Block turret) {
+
+    public TurretRoom(int x, int y, Block turret, int cost) {
         super(x, y);
         this.block = turret;
         this.item = items.get(turret);
+        this.cost = cost;
+    }
+
+    public void buy(PlayerData data) {
+        buyyed = true;
+        data.money -= cost;
     }
 
     @Override
     public void onTouch(PlayerData data) {
+        if (canBuy(data)) {
+            buy(data);
+            Call.label("[lime]buyyed by:[white] " + data.player.name, 2, centreDrawx, centreDrawy);
+        }
     }
 
     @Override
@@ -53,12 +69,35 @@ public class TurretRoom extends Room {
 
     @Override
     public void generateLabel() {
+        if (buyyed) {
+            if (tile.build == null) {
+                tile.setNet(block, team, 0);
+                if (item != null) {
+                    itemTile.setNet(Blocks.itemSource, team, 0);
+                    Timer.schedule(() -> {
+                        itemTile.build.configure(item);
+                    }, 1.5f);
+                }
+            }
+        } else {
+            StringBuilder lab = new StringBuilder();
+
+            lab.append("[accent]cost: ").append(cost);
+            lab.append("\n[white]").append(block.name);
+
+            for (Player player : Groups.player) {
+                if (player.team() == team) {
+                    Call.label(player.con, lab.toString(), SEC_TIMER * 10 / 60f, centreDrawx, centreDrawy - (block.size + 1) * 8);
+                }
+            }
+        }
+
     }
 
     @Override
     public void generate(Tiles tiles) {
         int end = block.size + ((block.size == 2 || block.size == 4) ? 0 : -1);
-        int start = -1 + ((block.size == 1 || block.size == 3) ? -1 : 0); 
+        int start = -1 + ((block.size == 1 || block.size == 3) ? -1 : 0);
         for (int xx = start; xx <= end; xx++) {
             for (int yy = start; yy <= end; yy++) {
                 Floor floor = (Floor) Blocks.metalFloor;
@@ -70,13 +109,7 @@ public class TurretRoom extends Room {
                 tiles.getn(xx + x, yy + y).setBlock(Blocks.air);
             }
         }
-
-        tiles.getn(x, y).setBlock(block, team);
-        build = tiles.getn(x, y).build;
-        
-        if (item != null) {
-            Timer.schedule(() -> {
-            }, 3);
-        }
+        tile = tiles.getn(x, y);
+        itemTile = tiles.getn(x, y + end);
     }
 }

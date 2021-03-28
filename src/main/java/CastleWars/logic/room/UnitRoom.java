@@ -3,6 +3,7 @@ package CastleWars.logic.room;
 import static CastleWars.game.Logic.SEC_TIMER;
 import CastleWars.logic.PlayerData;
 import static CastleWars.logic.room.Room.PUDDLE;
+import arc.math.Mathf;
 import arc.struct.Seq;
 import arc.util.Timer;
 import mindustry.Vars;
@@ -84,6 +85,7 @@ public class UnitRoom extends Room {
         }
     }
 
+    @Override
     public boolean canBuy(PlayerData data) {
         return data.income - income >= 0 && data.money - cost > 0;
     }
@@ -98,18 +100,17 @@ public class UnitRoom extends Room {
             unit1.set(player.team().core().x, player.team().core().y + 3 * Vars.tilesize);
         } else {
             float y = player.team() == Team.blue ? Team.sharded.core().y : Team.blue.core().y;
-            unit1.set(player.team().core().x, y);
+            unit1.set(player.team().core().x, y + Mathf.random(-16, 16));
         }
         unit1.add();
         if (classType == Room.ClassType.Defender) {
             unit1.team(player.team());
         }
-
     }
 
     public void spawn(int sec) {
         Timer.schedule(() -> {
-            Unit unit1 = unitType.spawn(team, team == Team.blue ? centreDrawx - 8 * 7 : centreDrawx + 8 * 7, centreDrawy);
+            Unit unit1 = unitType.spawn(team, team == Team.blue ? centreDrawx : centreDrawx, centreDrawy);
             unit1.health = 999999f;
             unit1.mounts = new WeaponMount[0];
             unit = unit1;
@@ -131,7 +132,6 @@ public class UnitRoom extends Room {
                 Call.label(player.con, lab.toString(), SEC_TIMER * 10 / 60f, centreDrawx, centreDrawy - Vars.tilesize * (Room.ROOM_SIZE + 1));
             }
         }
-
     }
 
     @Override
