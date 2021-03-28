@@ -41,6 +41,8 @@ public class Logic {
         rules.waves = true;
         rules.waveTimer = false;
         rules.unitCap = 999999;
+        rules.teams.get(Team.blue).cheat = true;
+        rules.teams.get(Team.sharded).cheat = true;
         interval = new Interval(3);
     }
 

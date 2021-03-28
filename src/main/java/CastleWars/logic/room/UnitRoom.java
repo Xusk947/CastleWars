@@ -109,7 +109,7 @@ public class UnitRoom extends Room {
 
     public void spawn(int sec) {
         Timer.schedule(() -> {
-            Unit unit1 = unitType.spawn(team, centreDrawx, centreDrawy);
+            Unit unit1 = unitType.spawn(team, team == Team.blue ? centreDrawx - 8 * 7 : centreDrawx + 8 * 7, centreDrawy);
             unit1.health = 999999f;
             unit1.mounts = new WeaponMount[0];
             unit = unit1;
