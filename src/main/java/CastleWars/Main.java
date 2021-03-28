@@ -28,15 +28,19 @@ public class Main extends Plugin {
 
         Events.run(EventType.Trigger.update, () -> {
             Groups.unit.intersect((Vars.world.height() * Vars.tilesize) / 2, (Vars.world.height() * Vars.tilesize) / 2, 1, 1, unit -> {
-			    unit.set(unit.team().data().core().x, unit.team().data().core().y + 4 * Vars.tilesize);
-			    if (unit.isPlayer()) unit.getPlayer().unit(Nulls.unit);
-		    });
-            
+                if (unit.team.core() != null) {
+                    unit.set(unit.team().data().core().x, unit.team().data().core().y + 4 * Vars.tilesize);
+                    if (unit.isPlayer()) {
+                        unit.getPlayer().unit(Nulls.unit);
+                    }
+                };
+            });
+
             Groups.player.each(player -> {
                 if (player.unit() != null) {
                     if (player.unit().type == UnitTypes.alpha && player.team().core() != null) {
                         Unit unit = UnitTypes.dagger.create(Team.crux);
-                        unit.set(player.team().core().x, player.team().core().y + 4 *Vars.tilesize);
+                        unit.set(player.team().core().x, player.team().core().y + 4 * Vars.tilesize);
                         unit.add();
                         unit.team(player.team());
                         unit.spawnedByCore = true;
@@ -54,13 +58,13 @@ public class Main extends Plugin {
             } else {
                 event.player.team(Team.sharded);
             }
-            Call.sendMessage(event.player.con, "You in: [#" + event.player.team().color.toString() + "]"+ event.player.team().name + " [white]team", "[sky][Omni]", Nulls.player);
+            Call.sendMessage(event.player.con, "You in: [#" + event.player.team().color.toString() + "]" + event.player.team().name + " [white]team", "[sky][Omni]", Nulls.player);
         });
 
         Events.on(EventType.PlayerLeave.class, event -> {
             logic.datas.remove(data -> data.player.equals(event.player));
         });
-        
+
         Events.on(EventType.ServerLoadEvent.class, event -> {
             logic.reset();
             Vars.netServer.openServer();
