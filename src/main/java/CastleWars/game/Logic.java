@@ -120,9 +120,11 @@ public class Logic {
     }
 
     public void reset() {
+        int blue = datas.sum(p -> p.player.team() == Team.blue ? 1 : 0);
+        int = datas.sum(p -> p.player.team() == Team.sharded ? 1 : 0);
         for (PlayerData data : datas) {
             data.money = 0;
-            data.income = 20;
+            data.income = 20 - (int)(data.player.team() == sharded ? blue / sharded : sharded / blue)
         }
         seted = false;
         endTimer = END_TIMER;
