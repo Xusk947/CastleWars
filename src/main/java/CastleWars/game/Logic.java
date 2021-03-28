@@ -26,7 +26,7 @@ public class Logic {
     public static float SEC_TIMER = 60f;
 
     public float endTimer = END_TIMER;
-    public IntMap<Seq<UnitRoom>> rooms;
+    public IntMap<Seq<Room>> rooms;
     public Rules rules;
     public Seq<PlayerData> datas;
 
@@ -75,7 +75,7 @@ public class Logic {
             Call.setHudText(data.player.con, hud.toString());
         }
 
-        for (IntMap.Entry<Seq<UnitRoom>> rooms1 : rooms) {
+        for (IntMap.Entry<Seq<Room>> rooms1 : rooms) {
             for (Room room : rooms1.value) {
                 room.update();
                 // Touch logic
@@ -89,21 +89,9 @@ public class Logic {
         }
 
         if (interval.get(1, SEC_TIMER * 10)) {
-            for (IntMap.Entry<Seq<UnitRoom>> rooms1 : rooms) {
-                for (UnitRoom room : rooms1.value) {
-                    StringBuilder lab = new StringBuilder();
-                    lab.append("[orange]").append(room.classType).append("\n[accent]cost: [white]").append(room.cost);
-                    if (room.income > 0) {
-                        lab.append("\n[lime]");
-                    } else if (room.income < 0) {
-                        lab.append("\n[red]");
-                    }
-                    lab.append("income: ").append(room.income);
-                    datas.forEach(data -> {
-                        if (data.player.team() == room.team) {
-                            Call.label(data.player.con, lab.toString(), SEC_TIMER * 10 / 60f, room.centreDrawx, room.centreDrawy - Vars.tilesize * (Room.ROOM_SIZE + 1));
-                        }
-                    });
+            for (IntMap.Entry<Seq<Room>> rooms1 : rooms) {
+                for (Room room : rooms1.value) {
+                    room.generateLabel();
                 }
             }
         }
@@ -149,14 +137,11 @@ public class Logic {
         for (Player player : players) {
             Vars.netServer.sendWorldData(player);
         }
-        for (Seq<UnitRoom> rooms1 : rooms.values()) {
-            for (UnitRoom room : rooms1) {
-                Timer.schedule(() -> {
-                    Unit unit = room.unitType.spawn(room.team, room.centreDrawx, room.centreDrawy);
-                    unit.health = 999999f;
-                    unit.mounts = new WeaponMount[0];
-                    room.unit = unit;
-                }, 2);
+        for (Seq<Room> rooms1 : rooms.values()) {
+            for (Room room : rooms1) {
+                if (room instanceof UnitRoom) {
+                    ((UnitRoom) room).spawn(2);
+                }
             }
         }
 

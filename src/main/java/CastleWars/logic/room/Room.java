@@ -2,7 +2,10 @@ package CastleWars.logic.room;
 
 import arc.struct.Seq;
 import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.game.Team;
+import mindustry.world.Tiles;
+import mindustry.world.blocks.environment.Floor;
 
 public abstract class Room implements RoomComp {
 
@@ -10,10 +13,10 @@ public abstract class Room implements RoomComp {
     public static final float ROOM_DRAW_SIZE = ROOM_SIZE / 2 * Vars.tilesize;
     public static final int PUDDLE = (ROOM_SIZE * 2 + 1 + 3);
 
-    private final int x, y;
+    final int x, y;
     public float drawx, drawy, endDrawx, endDrawy, centreDrawx, centreDrawy;
     public int cost;
-    
+
     public Team team;
 
     public Room(int x, int y) {

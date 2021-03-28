@@ -10,13 +10,12 @@ import mindustry.game.Team;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.Tiles;
-import mindustry.world.blocks.environment.Floor;
 
 public class Generator implements Cons<Tiles> {
 
     public static int MARGIN = 8;
 
-    public IntMap<Seq<UnitRoom>> rooms;
+    public IntMap<Seq<Room>> rooms;
 
     @Override
     public void get(Tiles tiles) {
@@ -57,24 +56,17 @@ public class Generator implements Cons<Tiles> {
         tiles.getn(bx, by).setBlock(Blocks.coreShard, Team.blue);
 
         for (Team team : t) {
-            Seq<UnitRoom> s = new Seq<>();
-            for (UnitRoom room : UnitRoom.rooms) {
+            Seq<Room> s = new Seq<>();
+            for (Room room : UnitRoom.rooms) {
                 int xx = (team == Team.blue ? bx : sx) + (team == Team.blue ? -room.getX() : room.getX());
                 int yy = (team == Team.blue ? by : sy) + room.getY();
-                for (int x = -Room.ROOM_SIZE; x <= Room.ROOM_SIZE; x++) {
-                    for (int y = -Room.ROOM_SIZE; y <= Room.ROOM_SIZE; y++) {
-                        Floor floor = (Floor) Blocks.metalFloor;
-
-                        if (x == -Room.ROOM_SIZE || y == -Room.ROOM_SIZE || x == Room.ROOM_SIZE || y == Room.ROOM_SIZE) {
-                            floor = (Floor) Blocks.space;
-                        }
-                        tiles.getn(xx + x, yy + y).setFloor(floor);
-                        tiles.getn(xx + x, yy + y).setBlock(Blocks.air);
-                    }
+                if (room instanceof UnitRoom) {
+                    UnitRoom room1 = (UnitRoom) room;
+                    UnitRoom room2 = new UnitRoom(xx, yy, room1.unitType, room1.classType, room1.cost, room1.income);
+                    room2.team = team;
+                    room2.generate(tiles);
+                    s.add(room2);
                 }
-                UnitRoom room1 = new UnitRoom(xx, yy, room.unitType, room.classType, room.cost, room.income);
-                room1.team = team;
-                s.add(room1);
             }
             rooms.put(team.id, s);
         }

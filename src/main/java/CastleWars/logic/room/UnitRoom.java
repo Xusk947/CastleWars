@@ -1,16 +1,23 @@
 package CastleWars.logic.room;
 
+import static CastleWars.game.Logic.SEC_TIMER;
 import CastleWars.logic.PlayerData;
 import static CastleWars.logic.room.Room.PUDDLE;
 import arc.struct.Seq;
-import arc.util.Log;
+import arc.util.Timer;
 import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.content.UnitTypes;
+import mindustry.entities.units.WeaponMount;
 import mindustry.game.Team;
+import mindustry.gen.Call;
+import mindustry.gen.Groups;
 import mindustry.gen.Nulls;
 import mindustry.gen.Player;
 import mindustry.gen.Unit;
 import mindustry.type.UnitType;
+import mindustry.world.Tiles;
+import mindustry.world.blocks.environment.Floor;
 
 public class UnitRoom extends Room {
 
@@ -30,18 +37,18 @@ public class UnitRoom extends Room {
     public static Seq<UnitRoom> rooms = new Seq<>(new UnitRoom[]{
         // Attacker
         new UnitRoom(-1 * PUDDLE, 0 * PUDDLE, UnitTypes.scepter, ClassType.Attacker, 1700, 17),
-        new UnitRoom(-1 * PUDDLE, 1 * PUDDLE, UnitTypes.dagger, ClassType.Attacker, 50, 1),
-        new UnitRoom(-2 * PUDDLE, 1 * PUDDLE, UnitTypes.mace, ClassType.Attacker, 120, 2),
-        new UnitRoom(-3 * PUDDLE, 1 * PUDDLE, UnitTypes.fortress, ClassType.Attacker, 300, 3),
+        new UnitRoom(-1 * PUDDLE, 1 * PUDDLE, UnitTypes.dagger, ClassType.Attacker, 50, 0),
+        new UnitRoom(-2 * PUDDLE, 1 * PUDDLE, UnitTypes.mace, ClassType.Attacker, 120, 1),
+        new UnitRoom(-3 * PUDDLE, 1 * PUDDLE, UnitTypes.fortress, ClassType.Attacker, 300, 2),
         new UnitRoom(-1 * PUDDLE, 2 * PUDDLE, UnitTypes.atrax, ClassType.Attacker, 100, 1),
-        new UnitRoom(-2 * PUDDLE, 2 * PUDDLE, UnitTypes.spiroct, ClassType.Attacker, 150, 2),
+        new UnitRoom(-2 * PUDDLE, 2 * PUDDLE, UnitTypes.spiroct, ClassType.Attacker, 150, 1),
         new UnitRoom(-3 * PUDDLE, 2 * PUDDLE, UnitTypes.arkyid, ClassType.Attacker, 2200, 20),
         new UnitRoom(-3 * PUDDLE, 0 * PUDDLE, UnitTypes.toxopid, ClassType.Attacker, 7000, 70),
         // Defender
         new UnitRoom(-2 * PUDDLE, 0 * PUDDLE, UnitTypes.scepter, ClassType.Defender, 2000, -25),
         new UnitRoom(-1 * PUDDLE, -1 * PUDDLE, UnitTypes.dagger, ClassType.Defender, 50, 0),
         new UnitRoom(-2 * PUDDLE, -1 * PUDDLE, UnitTypes.quasar, ClassType.Defender, 450, -1),
-        new UnitRoom(-3 * PUDDLE, -1 * PUDDLE, UnitTypes.fortress, ClassType.Defender, 300, -1),
+        new UnitRoom(-3 * PUDDLE, -1 * PUDDLE, UnitTypes.fortress, ClassType.Defender, 300, 0),
         new UnitRoom(-1 * PUDDLE, -2 * PUDDLE, UnitTypes.atrax, ClassType.Defender, 100, 0),
         new UnitRoom(-2 * PUDDLE, -2 * PUDDLE, UnitTypes.spiroct, ClassType.Defender, 150, 0),
         new UnitRoom(-3 * PUDDLE, -2 * PUDDLE, UnitTypes.arkyid, ClassType.Defender, 2200, -20), /*
@@ -98,5 +105,47 @@ public class UnitRoom extends Room {
             unit1.team(player.team());
         }
 
+    }
+
+    public void spawn(int sec) {
+        Timer.schedule(() -> {
+            Unit unit1 = unitType.spawn(team, centreDrawx, centreDrawy);
+            unit1.health = 999999f;
+            unit1.mounts = new WeaponMount[0];
+            unit = unit1;
+        }, 2);
+    }
+
+    @Override
+    public void generateLabel() {
+        StringBuilder lab = new StringBuilder();
+        lab.append("[orange]").append(classType).append("\n[accent]cost: [white]").append(cost);
+        if (income > 0) {
+            lab.append("\n[lime]income: ").append(income);
+        } else if (income < 0) {
+            lab.append("\n[red]income: ").append(income);
+        }
+
+        for (Player player : Groups.player) {
+            if (player.team() == team) {
+                Call.label(player.con, lab.toString(), SEC_TIMER * 10 / 60f, centreDrawx, centreDrawy - Vars.tilesize * (Room.ROOM_SIZE + 1));
+            }
+        }
+
+    }
+
+    @Override
+    public void generate(Tiles tiles) {
+        for (int xx = -Room.ROOM_SIZE; xx <= Room.ROOM_SIZE; xx++) {
+            for (int yy = -Room.ROOM_SIZE; yy <= Room.ROOM_SIZE; yy++) {
+                Floor floor = (Floor) Blocks.metalFloor;
+
+                if (xx == -Room.ROOM_SIZE || yy == -Room.ROOM_SIZE || xx == Room.ROOM_SIZE || yy == Room.ROOM_SIZE) {
+                    floor = (Floor) Blocks.space;
+                }
+                tiles.getn(xx + x, yy + y).setFloor(floor);
+                tiles.getn(xx + x, yy + y).setBlock(Blocks.air);
+            }
+        }
     }
 }
