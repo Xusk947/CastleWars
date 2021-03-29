@@ -54,29 +54,30 @@ public class Logic {
     }
 
     public void update() {
-        if (!seted || Groups.player.size() < 1) {
-            return;
-        }
+	if (!seted || Groups.player.size() < 1) {
+		return;
+	}
 
-        endTimer--;
-        if (endTimer <= 0) {
-            Call.infoMessage("[gray]|DRAW|");
-            Timer.schedule(() -> reset(), 3);
-            seted = false;
-        }
+	endTimer--;
+	if (endTimer <= 0) {
+		Call.infoMessage("[gray]|DRAW|");
+		Timer.schedule(() -> reset(), 3);
+		seted = false;
+	}
 
-        if (interval.get(0, SEC_TIMER)) {
-            datas.forEach(data -> {
-                data.money += data.income;
-            });
-        }
+	if (interval.get(0, SEC_TIMER)) {
+		datas.forEach(data -> {
+			data.money += data.income;
+		});
+	}
 
-        //only player loop per update
+	//only player loop per update
+	boolean label = interval.get(1, SEC_TIMER * 10);
 	for (int i = 0;i < datas.size;i++) {
 		PlayerData data = datas.get(i);
 		StringBuilder hud = new StringBuilder();
 
-		hud.append("[gray]Time remain: ").append(Mathf.floor(endTimer / 60f)).append("\n");
+		hud.append("[gray]Time left: ").append(Mathf.floor(endTimer / 60f)).append("\n");
 		hud.append("[gold]Balance: ").append(data.money).append("\n");
 		if (data.income > 0) {
 			hud.append("[lime]");
@@ -87,15 +88,20 @@ public class Logic {
 		Call.setHudText(data.player.con, hud.toString());
 
 		Player player = data.player;
-		
+
 		/*
-		touch logic |
+		touch logic
 		since rooms is a constant size its better to loop rooms inside playerdata than loop playerdata inside rooms
-		*/
+		 */
 		for (IntMap.Entry<Seq<Room>> entry : rooms) {
-			if (i == 0) room.update();
+
 
 			for (Room room : entry.value) {
+				if (i == 0) room.update();
+				if (label) {
+					room.generateLabel(player);
+				}
+
 				if (player.team() == room.team && player.unit() != null && room.rect(player.unit().aimX, player.unit().aimY) && player.unit().isShooting) {
 					room.onTouch(data);
 				}
@@ -114,27 +120,19 @@ public class Logic {
 		}
 	}
 
-        if (interval.get(1, SEC_TIMER * 10)) {
-            for (IntMap.Entry<Seq<Room>> rooms1 : rooms) {
-                for (Room room : rooms1.value) {
-                    room.generateLabel();
-                }
-            }
-        }
+	if (Team.sharded.core()
+		== null) {
+		Call.infoMessage("[#" + Team.blue.color.toString() + "]| Blue Winners |");
+		Timer.schedule(() -> reset(), 3);
+		seted = false;
+	} else if (Team.blue.core()
+			== null) {
+		Call.infoMessage("[#" + Team.sharded.color.toString() + "]| Sharded Winners |");
+		Timer.schedule(() -> reset(), 3);
+		seted = false;
+	}
 
-        if (Team.sharded.core()
-                == null) {
-            Call.infoMessage("[#" + Team.blue.color.toString() + "]| Blue Winners |");
-            Timer.schedule(() -> reset(), 3);
-            seted = false;
-        } else if (Team.blue.core()
-                == null) {
-            Call.infoMessage("[#" + Team.sharded.color.toString() + "]| Sharded Winners |");
-            Timer.schedule(() -> reset(), 3);
-            seted = false;
-        }
-
-    }
+}
 
     public void reset() {
         for (PlayerData data : datas) {
