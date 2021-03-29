@@ -95,6 +95,10 @@ public class Main extends Plugin {
     @Override
     public void registerClientCommands(CommandHandler handler) {
         handler.<Player>register("pay", "<amount> <username...>", "pay someone money", (args, player) -> {
+            if (!player.admin) {
+                player.sendMessage("[scarlet]You don't have permission to run this command.");
+            }
+            
             int amount = 0;
             try {
                 amount = Integer.parseInt(args[0]);
