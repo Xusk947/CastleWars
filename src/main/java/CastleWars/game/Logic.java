@@ -72,48 +72,47 @@ public class Logic {
         }
 
         //only player loop per update
-        for (int i = 0;i < datas.size;i++) {
-            PlayerData data = datas.get(i);
-			StringBuilder hud = new StringBuilder();
+	for (int i = 0;i < datas.size;i++) {
+		PlayerData data = datas.get(i);
+		StringBuilder hud = new StringBuilder();
 
-			hud.append("[gray]Time remain: ").append(Mathf.floor(endTimer / 60f)).append("\n");
-			hud.append("[gold]Balance: ").append(data.money).append("\n");
-			if (data.income > 0) {
-				hud.append("[lime]");
-			} else {
-				hud.append("[red]");
-			}
-			hud.append("Income: ").append(data.income);
-			Call.setHudText(data.player.con, hud.toString());
+		hud.append("[gray]Time remain: ").append(Mathf.floor(endTimer / 60f)).append("\n");
+		hud.append("[gold]Balance: ").append(data.money).append("\n");
+		if (data.income > 0) {
+			hud.append("[lime]");
+		} else {
+			hud.append("[red]");
+		}
+		hud.append("Income: ").append(data.income);
+		Call.setHudText(data.player.con, hud.toString());
 
-			Player player = data.player;
-            
-            /*
-            touch logic
-            since the amount of rooms is always constant this is
-            normally better than looping playerdata inside of looping the rooms
-            */
-			for (IntMap.Entry<Seq<Room>> entry : rooms) {
-                if (i == 0) room.update();
+		Player player = data.player;
+		
+		/*
+		touch logic |
+		since rooms is a constant size its better to loop rooms inside playerdata than loop playerdata inside rooms
+		*/
+		for (IntMap.Entry<Seq<Room>> entry : rooms) {
+			if (i == 0) room.update();
 
-				for (Room room : entry.value) {
-					if (player.team() == room.team && player.unit() != null && room.rect(player.unit().aimX, player.unit().aimY) && player.unit().isShooting) {
-						room.onTouch(data);
-					}
-				}
-			}
-
-			if (player.unit() != null) {
-				if (player.unit().type == UnitTypes.alpha && player.team().core() != null) {
-					Unit unit = UnitTypes.dagger.create(Team.crux);
-					unit.set(player.team().core().x, player.team().core().y + 4 * Vars.tilesize);
-					unit.add();
-					unit.team(player.team());
-					unit.spawnedByCore = true;
-					player.unit(unit);
+			for (Room room : entry.value) {
+				if (player.team() == room.team && player.unit() != null && room.rect(player.unit().aimX, player.unit().aimY) && player.unit().isShooting) {
+					room.onTouch(data);
 				}
 			}
 		}
+
+		if (player.unit() != null) {
+			if (player.unit().type == UnitTypes.alpha && player.team().core() != null) {
+				Unit unit = UnitTypes.dagger.create(Team.crux);
+				unit.set(player.team().core().x, player.team().core().y + 4 * Vars.tilesize);
+				unit.add();
+				unit.team(player.team());
+				unit.spawnedByCore = true;
+				player.unit(unit);
+			}
+		}
+	}
 
         if (interval.get(1, SEC_TIMER * 10)) {
             for (IntMap.Entry<Seq<Room>> rooms1 : rooms) {
