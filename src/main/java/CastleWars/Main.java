@@ -84,6 +84,7 @@ public class Main extends Plugin {
             Blocks.coreShard.unitCapModifier = 999999;
             Blocks.coreNucleus.unitCapModifier = 999999;
             Blocks.coreFoundation.unitCapModifier = 999999;
+            Vars.content.units().each(u->u.weapons.each(w->w.bullet.recoil = 0));
         });
     }
     
