@@ -1,6 +1,7 @@
 package CastleWars.logic.room;
 
 import CastleWars.logic.PlayerData;
+import mindustry.gen.Player;
 import mindustry.world.Tiles;
 
 public interface RoomComp {
@@ -10,5 +11,5 @@ public interface RoomComp {
     public void onTouch(PlayerData data);
     public void update();
     public void generate(Tiles tiles);
-    public void generateLabel();
+    public void generateLabel(Player player);
 }

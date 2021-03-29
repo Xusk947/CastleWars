@@ -101,9 +101,13 @@ public class Logic {
         }
 
         if (interval.get(1, SEC_TIMER * 10)) {
-            for (IntMap.Entry<Seq<Room>> rooms1 : rooms) {
-                for (Room room : rooms1.value) {
-                    room.generateLabel();
+            for (PlayerData data : datas) {
+                for (IntMap.Entry<Seq<Room>> rooms1 : rooms) {
+                    for (Room room : rooms1.value) {
+                        if (room.team == data.player.team()) {
+                            room.generateLabel(data.player);
+                        }
+                    }
                 }
             }
         }
@@ -125,7 +129,7 @@ public class Logic {
     public void reset() {
         for (PlayerData data : datas) {
             data.money = 0;
-            data.income = 20;
+            data.income = PlayerData.basicIncome;
         }
         seted = false;
         endTimer = END_TIMER;

@@ -53,8 +53,8 @@ public class Main extends Plugin {
 
             Groups.player.each(player -> {
                 if (player.unit() != null) {
-                    if (player.unit().type == UnitTypes.alpha && player.team().core() != null) {
-                        Unit unit = UnitTypes.dagger.create(Team.crux);
+                    if ((player.unit().type == UnitTypes.gamma || player.unit().type == UnitTypes.alpha) && player.team().core() != null) {
+                        Unit unit = UnitTypes.risso.create(Team.crux);
                         unit.set(player.team().core().x, player.team().core().y + 4 * Vars.tilesize);
                         unit.add();
                         unit.team(player.team());
@@ -93,31 +93,6 @@ public class Main extends Plugin {
 
     @Override
     public void registerClientCommands(CommandHandler handler) {
-        handler.<Player>register("pay", "<amount> <username...>", "pay someone money", (args, player) -> {
-            int amount = 0;
-            try {
-                amount = Integer.parseInt(args[0]);
-                if (amount <= 0) {
-                    player.sendMessage("Invalid payment amount.");
-                }
-            } catch (NumberFormatException ignored) {
-                player.sendMessage("Invalid payment amount.");
-                return;
-            }
-
-            //allows for extra output to the player
-            String name = null;
-            //only loop playerdata once instead of using .find twice
-            for (PlayerData p : logic.datas) {
-                if (Strings.stripColors(p.player.name).equalsIgnoreCase(args[1])) {
-                    name = p.player.name;
-                    p.money += amount;
-                } else if (p.player == player) {
-                    p.money -= amount;
-                }
-            }
-            player.sendMessage(name != null ? "Successfully sent " + name + " $" + amount : "Could not find " + args[1]);
-        });
         handler.<Player>register("info", "Info for Castle Wars", (args, player) -> {
             player.sendMessage("[lime]Defender[white] units defend the core.\n"
                     + "[scarlet]Attacker[white] units attack the [scarlet]enemy[white] team.\n"

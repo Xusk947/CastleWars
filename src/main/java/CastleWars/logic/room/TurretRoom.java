@@ -13,7 +13,6 @@ import mindustry.gen.Building;
 import mindustry.gen.Call;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
-import mindustry.net.Administration;
 import mindustry.type.Item;
 import mindustry.world.Block;
 import mindustry.world.Tile;
@@ -27,10 +26,12 @@ public class TurretRoom extends Room {
 
     public static Seq<TurretRoom> rooms = new Seq<>(new TurretRoom[]{
         new TurretRoom(8, 7, Blocks.lancer, 500),
-        new TurretRoom(8, 0, Blocks.ripple, 1500),
         new TurretRoom(8, -7, Blocks.lancer, 500),
-        new TurretRoom(0, -10, Blocks.foreshadow, 4000),
-        new TurretRoom(0, 10, Blocks.foreshadow, 4000),});
+        new TurretRoom(10, -15, Blocks.foreshadow, 4000),
+        new TurretRoom(20, -15, Blocks.foreshadow, 4000),
+        new TurretRoom(20, 15, Blocks.foreshadow, 4000),
+        new TurretRoom(10, 15, Blocks.foreshadow, 4000),
+    });
 
     public Block block;
     public Item item = null;
@@ -77,7 +78,7 @@ public class TurretRoom extends Room {
     }
 
     @Override
-    public void generateLabel() {
+    public void generateLabel(Player player) {
         if (buyyed) {
             if (tile.build == null) {
                 tile.setNet(block, team, 0);
@@ -87,20 +88,14 @@ public class TurretRoom extends Room {
 
             lab.append("[accent]cost: ").append(cost);
             lab.append("\n[white]").append(block.name);
-
-            for (Player player : Groups.player) {
-                if (player.team() == team) {
-                    Call.label(player.con, lab.toString(), SEC_TIMER * 10 / 60f, centreDrawx, centreDrawy - (block.size + 1) * 8);
-                }
-            }
+            Call.label(player.con, lab.toString(), SEC_TIMER * 10 / 60f, centreDrawx, centreDrawy - Vars.tilesize * (block.size + 1));
         }
-
     }
 
     @Override
     public void generate(Tiles tiles) {
-        int end = block.size + ((block.size == 2 || block.size == 4) ? 0 : -1);
-        int start = -1 + ((block.size == 1 || block.size == 3) ? -1 : 0);
+        int end = block.size + ((block.size == 2) ? 0 : -1);
+        int start = -1 + ((block.size == 1 || block.size == 3 || block.size == 4) ? -1 : 0);
         for (int xx = start; xx <= end; xx++) {
             for (int yy = start; yy <= end; yy++) {
                 Floor floor = (Floor) Blocks.metalFloor;
