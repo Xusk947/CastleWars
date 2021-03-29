@@ -3,6 +3,7 @@ package CastleWars.logic.room;
 import static CastleWars.game.Logic.SEC_TIMER;
 import CastleWars.logic.PlayerData;
 import static CastleWars.logic.room.Room.PUDDLE;
+import arc.math.Mathf;
 import arc.struct.Seq;
 import arc.util.Timer;
 import mindustry.Vars;
@@ -39,11 +40,12 @@ public class UnitRoom extends Room {
         new UnitRoom(-1 * PUDDLE, 0 * PUDDLE, UnitTypes.scepter, ClassType.Attacker, 1700, 17),
         new UnitRoom(-1 * PUDDLE, 1 * PUDDLE, UnitTypes.dagger, ClassType.Attacker, 50, 0),
         new UnitRoom(-2 * PUDDLE, 1 * PUDDLE, UnitTypes.mace, ClassType.Attacker, 120, 1),
-        new UnitRoom(-3 * PUDDLE, 1 * PUDDLE, UnitTypes.fortress, ClassType.Attacker, 300, 2),
-        new UnitRoom(-1 * PUDDLE, 2 * PUDDLE, UnitTypes.atrax, ClassType.Attacker, 100, 1),
+        new UnitRoom(-3 * PUDDLE, 1 * PUDDLE, UnitTypes.fortress, ClassType.Attacker, 300, 3),
+        new UnitRoom(-1 * PUDDLE, 2 * PUDDLE, UnitTypes.atrax, ClassType.Attacker, 100, 0),
         new UnitRoom(-2 * PUDDLE, 2 * PUDDLE, UnitTypes.spiroct, ClassType.Attacker, 150, 1),
         new UnitRoom(-3 * PUDDLE, 2 * PUDDLE, UnitTypes.arkyid, ClassType.Attacker, 2200, 20),
         new UnitRoom(-3 * PUDDLE, 0 * PUDDLE, UnitTypes.toxopid, ClassType.Attacker, 7000, 70),
+        new UnitRoom(0, 2 * PUDDLE, UnitTypes.reign, ClassType.Attacker, 5000, 50),
         // Defender
         new UnitRoom(-2 * PUDDLE, 0 * PUDDLE, UnitTypes.scepter, ClassType.Defender, 2000, -25),
         new UnitRoom(-1 * PUDDLE, -1 * PUDDLE, UnitTypes.dagger, ClassType.Defender, 50, 0),
@@ -51,7 +53,8 @@ public class UnitRoom extends Room {
         new UnitRoom(-3 * PUDDLE, -1 * PUDDLE, UnitTypes.fortress, ClassType.Defender, 300, 0),
         new UnitRoom(-1 * PUDDLE, -2 * PUDDLE, UnitTypes.atrax, ClassType.Defender, 100, 0),
         new UnitRoom(-2 * PUDDLE, -2 * PUDDLE, UnitTypes.spiroct, ClassType.Defender, 150, 0),
-        new UnitRoom(-3 * PUDDLE, -2 * PUDDLE, UnitTypes.arkyid, ClassType.Defender, 2200, -20), /*
+        new UnitRoom(-3 * PUDDLE, -2 * PUDDLE, UnitTypes.arkyid, ClassType.Defender, 2200, -20),
+        new UnitRoom(0, -2 * PUDDLE, UnitTypes.reign, ClassType.Defender, 5000, -50)/*
         new UnitRoom(-2 * PUDDLE, 0, UnitTypes.arkyid, ClassType.Attacker, 2200, -20),
         new UnitRoom(-1 * PUDDLE, -1 * PUDDLE, UnitTypes.dagger, ClassType.Attacker, 50, 1),
         new UnitRoom(-1 * PUDDLE, 0, UnitTypes.mace, ClassType.Attacker, 120, 2),
@@ -63,7 +66,8 @@ public class UnitRoom extends Room {
         new UnitRoom(2 * PUDDLE, 0, UnitTypes.dagger, ClassType.Defender, 80, 0),
         new UnitRoom(1 * PUDDLE, PUDDLE, UnitTypes.spiroct, ClassType.Defender, 360, 0),
         new UnitRoom(1 * PUDDLE, 0, UnitTypes.fortress, ClassType.Defender, 350, -1),
-        new UnitRoom(1 * PUDDLE, -1 * PUDDLE, UnitTypes.scepter, ClassType.Defender, 2000, -20),*/});
+        new UnitRoom(1 * PUDDLE, -1 * PUDDLE, UnitTypes.scepter, ClassType.Defender, 2000, -20),*/
+    });
 
     @Override
     public void update() {
@@ -84,6 +88,7 @@ public class UnitRoom extends Room {
         }
     }
 
+    @Override
     public boolean canBuy(PlayerData data) {
         return data.income - income >= 0 && data.money - cost > 0;
     }
@@ -98,18 +103,17 @@ public class UnitRoom extends Room {
             unit1.set(player.team().core().x, player.team().core().y + 3 * Vars.tilesize);
         } else {
             float y = player.team() == Team.blue ? Team.sharded.core().y : Team.blue.core().y;
-            unit1.set(player.team().core().x, y);
+            unit1.set(player.team().core().x, y + Mathf.random(-16, 16));
         }
         unit1.add();
         if (classType == Room.ClassType.Defender) {
             unit1.team(player.team());
         }
-
     }
 
     public void spawn(int sec) {
         Timer.schedule(() -> {
-            Unit unit1 = unitType.spawn(team, centreDrawx, centreDrawy);
+            Unit unit1 = unitType.spawn(team, team == Team.blue ? centreDrawx : centreDrawx, centreDrawy);
             unit1.health = 999999f;
             unit1.mounts = new WeaponMount[0];
             unit = unit1;
@@ -131,7 +135,6 @@ public class UnitRoom extends Room {
                 Call.label(player.con, lab.toString(), SEC_TIMER * 10 / 60f, centreDrawx, centreDrawy - Vars.tilesize * (Room.ROOM_SIZE + 1));
             }
         }
-
     }
 
     @Override

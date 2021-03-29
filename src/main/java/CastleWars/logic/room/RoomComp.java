@@ -6,6 +6,7 @@ import mindustry.world.Tiles;
 public interface RoomComp {
     public boolean rect(float x, float y);
     public boolean canBuy(int balance);
+    public boolean canBuy(PlayerData data);
     public void onTouch(PlayerData data);
     public void update();
     public void generate(Tiles tiles);

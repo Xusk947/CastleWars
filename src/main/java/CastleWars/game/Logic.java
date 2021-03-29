@@ -3,6 +3,7 @@ package CastleWars.game;
 import CastleWars.logic.Generator;
 import CastleWars.logic.PlayerData;
 import CastleWars.logic.room.Room;
+import CastleWars.logic.room.TurretRoom;
 import CastleWars.logic.room.UnitRoom;
 import arc.math.Mathf;
 import arc.struct.IntMap;
@@ -11,6 +12,7 @@ import arc.struct.StringMap;
 import arc.util.Interval;
 import arc.util.Timer;
 import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.entities.units.WeaponMount;
 import mindustry.game.Rules;
 import mindustry.game.Team;
@@ -19,6 +21,8 @@ import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.gen.Unit;
 import mindustry.maps.Map;
+import mindustry.world.Block;
+import mindustry.world.blocks.defense.turrets.Turret;
 
 public class Logic {
 
@@ -41,6 +45,11 @@ public class Logic {
         rules.waves = true;
         rules.waveTimer = false;
         rules.unitCap = 999999;
+        rules.teams.get(Team.blue).cheat = true;
+        rules.teams.get(Team.sharded).cheat = true;
+        for (Block block : Vars.content.blocks()) {
+            if (block != Blocks.thoriumWall && block != Blocks.thoriumWallLarge) rules.bannedBlocks.add(block);
+        }
         interval = new Interval(3);
     }
 

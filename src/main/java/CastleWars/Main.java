@@ -3,6 +3,7 @@ package CastleWars;
 import CastleWars.game.Logic;
 import CastleWars.logic.PlayerData;
 import CastleWars.logic.UnitCost;
+import CastleWars.logic.room.TurretRoom;
 import arc.Events;
 import mindustry.Vars;
 import mindustry.content.Blocks;
@@ -23,19 +24,23 @@ public class Main extends Plugin {
     public void init() {
         logic = new Logic();
         UnitCost.init(logic);
+        TurretRoom.init();
 
         Events.run(EventType.Trigger.update, () -> {
-            Groups.unit.each(unit -> {
-                if ((unit.team == Team.sharded && unit.tileY() > Vars.world.height() / 2) || (unit.team == Team.blue && unit.tileY() < Vars.world.height() / 2)) {
-                    unit.set(unit.team().core().x, unit.team().core().y + 4 *Vars.tilesize);
-                    if (unit.isPlayer()) unit.getPlayer().unit(Nulls.unit);
-                }
+            Groups.unit.intersect((Vars.world.height() * Vars.tilesize) / 2, (Vars.world.height() * Vars.tilesize) / 2, 1, 1, unit -> {
+                if (unit.team.core() != null) {
+                    unit.set(unit.team().data().core().x, unit.team().data().core().y + 4 * Vars.tilesize);
+                    if (unit.isPlayer()) {
+                        unit.getPlayer().unit(Nulls.unit);
+                    }
+                };
             });
+
             Groups.player.each(player -> {
-                if (player.unit().spawnedByCore && player.unit().type != UnitTypes.dagger) {
-                    if (player.team().core() != null) {
+                if (player.unit() != null) {
+                    if (player.unit().type == UnitTypes.alpha && player.team().core() != null) {
                         Unit unit = UnitTypes.dagger.create(Team.crux);
-                        unit.set(player.team().core().x, player.team().core().y + 4 *Vars.tilesize);
+                        unit.set(player.team().core().x, player.team().core().y + 4 * Vars.tilesize);
                         unit.add();
                         unit.team(player.team());
                         unit.spawnedByCore = true;
@@ -53,13 +58,13 @@ public class Main extends Plugin {
             } else {
                 event.player.team(Team.sharded);
             }
-            Call.sendMessage(event.player.con, "You in: [#" + event.player.team().color.toString() + "]"+ event.player.team().name + " [white]team", "[sky][Omni]", Nulls.player);
+            Call.sendMessage(event.player.con, "You in: [#" + event.player.team().color.toString() + "]" + event.player.team().name + " [white]team", "[sky][Omni]", Nulls.player);
         });
 
         Events.on(EventType.PlayerLeave.class, event -> {
             logic.datas.remove(data -> data.player.equals(event.player));
         });
-        
+
         Events.on(EventType.ServerLoadEvent.class, event -> {
             logic.reset();
             Vars.netServer.openServer();

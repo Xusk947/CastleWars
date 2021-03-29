@@ -1,10 +1,13 @@
 package CastleWars.logic;
 
 import CastleWars.logic.room.Room;
+import CastleWars.logic.room.TurretRoom;
 import CastleWars.logic.room.UnitRoom;
 import arc.func.Cons;
 import arc.struct.IntMap;
 import arc.struct.Seq;
+import arc.util.Log;
+import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.game.Team;
 import mindustry.world.Block;
@@ -44,9 +47,9 @@ public class Generator implements Cons<Tiles> {
         }
 
         // Generate: rooms for cores
-        int sx = tiles.width / 8,
+        int sx = (int) ((float) tiles.width / 7.8f),
                 sy = tiles.height / 4;
-        int bx = tiles.width - tiles.width / 8,
+        int bx = tiles.width - (int) ((float) tiles.width / 7.8f),
                 by = tiles.height - tiles.height / 4;
 
         Team[] t = new Team[]{Team.sharded, Team.blue};
@@ -55,14 +58,27 @@ public class Generator implements Cons<Tiles> {
 
         tiles.getn(bx, by).setBlock(Blocks.coreShard, Team.blue);
 
+        Seq<Room> rm = new Seq<>();
+        rm.addAll(UnitRoom.rooms);
+        rm.addAll(TurretRoom.rooms);
+        
         for (Team team : t) {
             Seq<Room> s = new Seq<>();
-            for (Room room : UnitRoom.rooms) {
-                int xx = (team == Team.blue ? bx : sx) + (team == Team.blue ? -room.getX() : room.getX());
-                int yy = (team == Team.blue ? by : sy) + room.getY();
+            for (Room room : rm) {
                 if (room instanceof UnitRoom) {
+                    int xx = (team == Team.blue ? bx : sx) + (team == Team.blue ? -room.getX() : room.getX());
+                    int yy = (team == Team.blue ? by : sy) + room.getY();
                     UnitRoom room1 = (UnitRoom) room;
                     UnitRoom room2 = new UnitRoom(xx, yy, room1.unitType, room1.classType, room1.cost, room1.income);
+                    room2.team = team;
+                    room2.generate(tiles);
+                    s.add(room2);
+                }
+                if (room instanceof TurretRoom) {
+                    int xx = (team == Team.blue ? bx : sx) + (team == Team.blue ? -room.getX() : room.getX());
+                    int yy = (team == Team.blue ? by : sy) + room.getY();
+                    TurretRoom room1 = (TurretRoom) room;
+                    TurretRoom room2 = new TurretRoom(xx, yy, room1.block, room1.cost);
                     room2.team = team;
                     room2.generate(tiles);
                     s.add(room2);
