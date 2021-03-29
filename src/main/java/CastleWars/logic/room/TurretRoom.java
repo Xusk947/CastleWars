@@ -78,7 +78,7 @@ public class TurretRoom extends Room {
 
     @Override
     public void update() {
-        if (buyyed && tile.build != null && interval.get(0, SEC_TIMER / 1.5f)) {
+        if (buyyed && tile.build != null && interval.get(0, SEC_TIMER * 20)) {
             Call.transferItemTo(Nulls.unit, Items.surgeAlloy, Integer.MAX_VALUE, super.drawx, super.drawy, tile.build);
         }
     }
