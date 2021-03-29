@@ -22,6 +22,7 @@ import arc.graphics.Colors;
 import arc.util.Strings;
 import mindustry.gen.Player;
 import arc.struct.*;
+import static CastleWars.game.Logic.SEC_TIMER;
 
 public class Main extends Plugin {
 
@@ -97,38 +98,60 @@ public class Main extends Plugin {
         
         handler.<Player>register("buy", "<unit/building>", "buy something", (args, player) -> {
             args[0] = Strings.stripColors(args[0]);
+            PlayerData data = logic.datas.find(p -> p.player.id == player.id);
+            if (data.buyLimiter.get(0, SEC_TIMER * 10)) {
+                player.sendMessage("[scarlet]You can only use this command every 10 seconds.");
+                return;
+            }
             
-            room: for (IntMap.Entry<Seq<Room>> entry : logic.rooms) {
+            for (IntMap.Entry<Seq<Room>> entry : logic.rooms) {
                 
                 for (Room room : entry.value) {
                     
                     //could add extra method to room like is(String name)
                     if (room instanceof UnitRoom) {
                         if (((UnitRomm)room).unitType.name.equalsIgnoreCase(args[0])) {
-                            room.onTouch(logic.datas.find(p -> p.player.id == player.id));
-                            break room;
+                            room.onTouch(data);
+                            player.sendMessage("Successfully bought " + args[0]);
+                            return;
                         }
                     } else if (room instanceof TurretRoom) {
                         if (((TurretRoom)room).block.name.equalsIgnoreCase(args[0])) {
-                            room.onTouch(logic.datas.find(p -> p.player.id == player.id));
-                            break room;
+                            room.onTouch(data);
+                            player.sendMessage("Successfully bought " + args[0]);
+                            return;
                         }
                     } else if (args[0].equalsIgnoreCase("miner") && room instanceof DrillRoom) {
-                        room.onTouch(logic.datas.find(p -> p.player.id == player.id));
-                        break room;
+                        room.onTouch(data);
+                        player.sendMessage("Successfully bought " + args[0]);
+                        return;
                     } else if (room instanceof CoreRoom && args[0].equalsIgnoreCase(Blocks.coreNucleus.name)) {
-                        room.onTouch(logic.datas.find(p -> p.player.id == player.id));
-                        break room;
+                        room.onTouch(data);
+                        player.sendMessage("Successfully bought " + args[0]);
+                        return;
                     }
                 }
             }
+            player.sendMessage("Could not buy " + args[0]);
         });
         
         //useful if you need to defend but want some passive income although might become slightly laggy
          handler.<Player>register("buyforever", "<unit/building/stop>", "buy something repeatedly until you run /buyforever stop", (args, player) -> {
             args[0] = Strings.stripColors(args[0]);
-            Room room1 = null;
             PlayerData data = logic.datas.find(p -> p.player.id == player.id)
+            
+            if (data.buyLimiter.get(0, SEC_TIMER * 10)) {
+                player.sendMessage("[scarlet]You can only use this command every 10 seconds.");
+                return;
+            }
+            
+            if (args[0].equalsIgnoreCase("stop")) {
+                if (data.buying != null) data.buying.cancel();
+                player.sendMessage("Successfully stopped buying.");
+                return;
+            }
+             
+            Room room1 = null;
             
             roomLoop: for (IntMap.Entry<Seq<Room>> entry : logic.rooms) {
                 
@@ -155,7 +178,12 @@ public class Main extends Plugin {
                 }
             }
              
-             data.buying = Timer.schedule(() -> room.onTouch(data), 0f, 1f);
+             if (room1 == null) {
+                player.sendMessage("Could not buy " + args[0]);
+                return;
+             }
+             
+             data.buying = Timer.schedule(() -> room1.onTouch(data), 0f, 1f);
         });
         
         handler.<Player>register("info", "Info for Castle Wars", (args, player) -> {
