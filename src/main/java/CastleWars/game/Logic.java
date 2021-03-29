@@ -5,6 +5,7 @@ import CastleWars.logic.PlayerData;
 import CastleWars.logic.room.Room;
 import CastleWars.logic.room.TurretRoom;
 import CastleWars.logic.room.UnitRoom;
+import static CastleWars.Main.*;
 import arc.math.Mathf;
 import arc.struct.IntMap;
 import arc.struct.Seq;
@@ -26,7 +27,7 @@ import mindustry.world.blocks.defense.turrets.Turret;
 
 public class Logic {
 
-    public static float END_TIMER = 60f * 60f * 10f;
+    public static float END_TIMER = INTERVAL * 60f * 10f;
     public static float SEC_TIMER = 60f;
 
     public float endTimer = END_TIMER;
