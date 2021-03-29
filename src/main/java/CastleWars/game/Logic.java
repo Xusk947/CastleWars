@@ -73,7 +73,7 @@ public class Logic {
 
         for (PlayerData data : datas) {
             StringBuilder hud = new StringBuilder();
-            hud.append("[gray]Time remain: ").append(Mathf.floor(endTimer / 60f)).append("\n");
+            hud.append("[gray]Time left: ").append(Mathf.floor(endTimer / 60f)).append("\n");
             hud.append("[gold]Balance: ").append(data.money).append("\n");
             if (data.income > 0) {
                 hud.append("[lime]");
