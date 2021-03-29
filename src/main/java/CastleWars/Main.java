@@ -15,10 +15,22 @@ import mindustry.gen.Groups;
 import mindustry.gen.Nulls;
 import mindustry.gen.Unit;
 import mindustry.mod.Plugin;
+import arc.util.CommandHandler;
+import mindustry.graphics.Pal;
+import arc.graphics.Colors;
 
 public class Main extends Plugin {
 
     Logic logic;
+    
+    static {
+        
+        //the UI puts these in colors and the server never inits the UI meaning that the plugin needs to put these in
+        Colors.put("accent", Pal.accent);
+	    Colors.put("unlaunched", Color.valueOf("8982ed"));
+	    Colors.put("highlight", Pal.accent.cpy().lerp(Color.white, 0.3F));
+	    Colors.put("stat", Pal.stat);
+    }
 
     @Override
     public void init() {
@@ -73,5 +85,40 @@ public class Main extends Plugin {
             Blocks.coreNucleus.unitCapModifier = 999999;
             Blocks.coreFoundation.unitCapModifier = 999999;
         });
+    }
+    
+    public void registerClientCommands(CommandHandler handler) {
+        handler.<Player>register("pay", "<amount> <username...>", "pay someone money", (args, player) -> {
+			int amount = 0;
+			try {
+				amount = Integer.parseInt(args[0]);
+				if (amount <= 0) {
+					player.sendMessage("Invalid payment amount.");
+				}
+			} catch (NumberFormatException ignored) {
+				player.sendMessage("Invalid payment amount.");
+				return;
+			}
+
+			//allows for extra output to the player
+			String name = null;
+			//only loop playerdata once instead of using .find twice
+			for (PlayerData p : logic.datas) {
+				if (Strings.stripColors(p.player.name).equalsIgnoreCase(args[1])) {
+					name = p.player.name;
+					p.money += amount;
+				} else if (p.player == player) {
+					p.money -= amount;
+				}
+			}
+			player.sendMessage(name != null ? "Successfully sent " + name + " $" + amount : "Could not find " + args[1]);
+		});
+	    handler.<Player>register("info", "Info for Castle Wars", (args, player) -> {
+	    	player.sendMessage("[lime]Defender[white] units defend the core.\n"
+				  + "[scarlet]Attacker[white] units attack the [scarlet]enemy[white] team.\n"
+				  + "Income is your money per second [scarlet]don't ever let it go negative.[white]\n"
+				  + "Shoot at units to buy units.\n"
+				  + "Why can't I buy this unit? If your income is below the income of the unit you can't buy it.");
+	    });
     }
 }
