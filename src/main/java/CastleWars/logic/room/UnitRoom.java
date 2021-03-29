@@ -12,7 +12,6 @@ import mindustry.content.UnitTypes;
 import mindustry.entities.units.WeaponMount;
 import mindustry.game.Team;
 import mindustry.gen.Call;
-import mindustry.gen.Groups;
 import mindustry.gen.Nulls;
 import mindustry.gen.Player;
 import mindustry.gen.Unit;
@@ -39,34 +38,26 @@ public class UnitRoom extends Room {
         // Attacker
         new UnitRoom(-1 * PUDDLE, 0 * PUDDLE, UnitTypes.scepter, ClassType.Attacker, 1700, 17),
         new UnitRoom(-1 * PUDDLE, 1 * PUDDLE, UnitTypes.dagger, ClassType.Attacker, 50, 0),
-        new UnitRoom(-2 * PUDDLE, 1 * PUDDLE, UnitTypes.mace, ClassType.Attacker, 120, 1),
+        new UnitRoom(-2 * PUDDLE, 1 * PUDDLE, UnitTypes.mace, ClassType.Attacker, 100, 1),
         new UnitRoom(-3 * PUDDLE, 1 * PUDDLE, UnitTypes.fortress, ClassType.Attacker, 300, 3),
-        new UnitRoom(-1 * PUDDLE, 2 * PUDDLE, UnitTypes.atrax, ClassType.Attacker, 100, 0),
+        new UnitRoom(-1 * PUDDLE, 2 * PUDDLE, UnitTypes.atrax, ClassType.Attacker, 100, 1),
         new UnitRoom(-2 * PUDDLE, 2 * PUDDLE, UnitTypes.spiroct, ClassType.Attacker, 150, 1),
         new UnitRoom(-3 * PUDDLE, 2 * PUDDLE, UnitTypes.arkyid, ClassType.Attacker, 2200, 20),
+        new UnitRoom(-1 * PUDDLE, 3 * PUDDLE, UnitTypes.bryde, ClassType.Attacker, 1200, 10),
+        new UnitRoom(-2 * PUDDLE, 3 * PUDDLE, UnitTypes.sei, ClassType.Attacker, 5000, 45),
         new UnitRoom(-3 * PUDDLE, 0 * PUDDLE, UnitTypes.toxopid, ClassType.Attacker, 7000, 70),
+        new UnitRoom(-1 * PUDDLE, -1 * PUDDLE, UnitTypes.pulsar, ClassType.Attacker, 200, 2),
         new UnitRoom(0, 2 * PUDDLE, UnitTypes.reign, ClassType.Attacker, 5000, 50),
         // Defender
-        new UnitRoom(-2 * PUDDLE, 0 * PUDDLE, UnitTypes.scepter, ClassType.Defender, 2000, -25),
-        new UnitRoom(-1 * PUDDLE, -1 * PUDDLE, UnitTypes.dagger, ClassType.Defender, 50, 0),
+        new UnitRoom(-2 * PUDDLE, 0 * PUDDLE, UnitTypes.scepter, ClassType.Defender, 2000, -20),
         new UnitRoom(-2 * PUDDLE, -1 * PUDDLE, UnitTypes.quasar, ClassType.Defender, 450, -1),
-        new UnitRoom(-3 * PUDDLE, -1 * PUDDLE, UnitTypes.fortress, ClassType.Defender, 300, 0),
-        new UnitRoom(-1 * PUDDLE, -2 * PUDDLE, UnitTypes.atrax, ClassType.Defender, 100, 0),
-        new UnitRoom(-2 * PUDDLE, -2 * PUDDLE, UnitTypes.spiroct, ClassType.Defender, 150, 0),
-        new UnitRoom(-3 * PUDDLE, -2 * PUDDLE, UnitTypes.arkyid, ClassType.Defender, 2200, -20),
-        new UnitRoom(0, -2 * PUDDLE, UnitTypes.reign, ClassType.Defender, 5000, -50)/*
-        new UnitRoom(-2 * PUDDLE, 0, UnitTypes.arkyid, ClassType.Attacker, 2200, -20),
-        new UnitRoom(-1 * PUDDLE, -1 * PUDDLE, UnitTypes.dagger, ClassType.Attacker, 50, 1),
-        new UnitRoom(-1 * PUDDLE, 0, UnitTypes.mace, ClassType.Attacker, 120, 2),
-        new UnitRoom(-1 * PUDDLE, PUDDLE, UnitTypes.pulsar, ClassType.Attacker, 380, 0),
-        new UnitRoom(0 * PUDDLE, PUDDLE, UnitTypes.fortress, ClassType.Attacker, 500, -2),
-        new UnitRoom(0 * PUDDLE, PUDDLE * 2, UnitTypes.scepter, ClassType.Attacker, 1500, -15),
-        new UnitRoom(0 * PUDDLE, PUDDLE * -2, UnitTypes.toxopid, ClassType.Attacker, 7000, -400),
-        new UnitRoom(0 * PUDDLE, -1 * PUDDLE, UnitTypes.quasar, ClassType.Defender, 580, 0),
-        new UnitRoom(2 * PUDDLE, 0, UnitTypes.dagger, ClassType.Defender, 80, 0),
-        new UnitRoom(1 * PUDDLE, PUDDLE, UnitTypes.spiroct, ClassType.Defender, 360, 0),
-        new UnitRoom(1 * PUDDLE, 0, UnitTypes.fortress, ClassType.Defender, 350, -1),
-        new UnitRoom(1 * PUDDLE, -1 * PUDDLE, UnitTypes.scepter, ClassType.Defender, 2000, -20),*/
+        new UnitRoom(-3 * PUDDLE, -1 * PUDDLE, UnitTypes.fortress, ClassType.Defender, 300, -1),
+        new UnitRoom(-1 * PUDDLE, -2 * PUDDLE, UnitTypes.atrax, ClassType.Defender, 100, -1),
+        new UnitRoom(-2 * PUDDLE, -2 * PUDDLE, UnitTypes.spiroct, ClassType.Defender, 150, -1),
+        new UnitRoom(-3 * PUDDLE, -2 * PUDDLE, UnitTypes.arkyid, ClassType.Defender, 2200, -22),
+        new UnitRoom(-1 * PUDDLE, -3 * PUDDLE, UnitTypes.bryde, ClassType.Defender, 1200, -10),
+        new UnitRoom(-2 * PUDDLE, -3 * PUDDLE, UnitTypes.sei, ClassType.Defender, 4500, -40),
+        new UnitRoom(0, -2 * PUDDLE, UnitTypes.reign, ClassType.Defender, 5000, -50)
     });
 
     @Override
@@ -90,7 +81,10 @@ public class UnitRoom extends Room {
 
     @Override
     public boolean canBuy(PlayerData data) {
-        return data.income - income >= 0 && data.money - cost > 0;
+        if (income > 0) {
+            return data.money - cost >= 0;
+        }
+        return data.income - income >= 0 && data.money - cost >= 0;
     }
 
     public void buy(PlayerData data) {
@@ -121,7 +115,7 @@ public class UnitRoom extends Room {
     }
 
     @Override
-    public void generateLabel() {
+    public void generateLabel(Player player) {
         StringBuilder lab = new StringBuilder();
         lab.append("[orange]").append(classType).append("\n[accent]cost: [white]").append(cost);
         if (income > 0) {
@@ -130,11 +124,7 @@ public class UnitRoom extends Room {
             lab.append("\n[red]income: ").append(income);
         }
 
-        for (Player player : Groups.player) {
-            if (player.team() == team) {
-                Call.label(player.con, lab.toString(), SEC_TIMER * 10 / 60f, centreDrawx, centreDrawy - Vars.tilesize * (Room.ROOM_SIZE + 1));
-            }
-        }
+        Call.label(player.con, lab.toString(), SEC_TIMER * 10 / 60f, centreDrawx, centreDrawy - Vars.tilesize * (Room.ROOM_SIZE + 1));
     }
 
     @Override

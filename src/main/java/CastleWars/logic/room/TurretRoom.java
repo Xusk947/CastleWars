@@ -26,14 +26,16 @@ public class TurretRoom extends Room {
 
     public static Seq<TurretRoom> rooms = new Seq<>(new TurretRoom[]{
         new TurretRoom(8, 7, Blocks.lancer, 500),
-        new TurretRoom(8, 0, Blocks.ripple, 1500),
         new TurretRoom(8, -7, Blocks.lancer, 500),
-        new TurretRoom(0, -10, Blocks.foreshadow, 4000),
-        new TurretRoom(0, 10, Blocks.foreshadow, 4000),});
+        new TurretRoom(10, -15, Blocks.foreshadow, 4000),
+        new TurretRoom(20, -15, Blocks.foreshadow, 4000),
+        new TurretRoom(20, 15, Blocks.foreshadow, 4000),
+        new TurretRoom(10, 15, Blocks.foreshadow, 4000),
+    });
 
     public Block block;
     public Item item = null;
-    public Tile tile, itemTile;
+    public Tile tile;
     public boolean buyyed = false;
 
     public static void init() {
@@ -48,6 +50,14 @@ public class TurretRoom extends Room {
         this.block = turret;
         this.item = items.get(turret);
         this.cost = cost;
+        /*
+        if (Vars.netServer == null) {
+            Timer.schedule(() -> {
+                Vars.netServer.admins.addActionFilter(action -> (action.type == Administration.ActionType.breakBlock || action.type == Administration.ActionType.placeBlock) && (action.tile != this.tile));
+            }, 5f);
+        } else {
+            Vars.netServer.admins.addActionFilter(action -> (action.type == Administration.ActionType.breakBlock || action.type == Administration.ActionType.placeBlock) && (action.tile != this.tile));
+        }*/
     }
 
     public void buy(PlayerData data) {
@@ -57,7 +67,7 @@ public class TurretRoom extends Room {
 
     @Override
     public void onTouch(PlayerData data) {
-        if (canBuy(data)) {
+        if (canBuy(data) && !buyyed) {
             buy(data);
             Call.label("[lime]builded by:[white] " + data.player.name, 2, centreDrawx, centreDrawy);
         }
@@ -68,36 +78,24 @@ public class TurretRoom extends Room {
     }
 
     @Override
-    public void generateLabel() {
+    public void generateLabel(Player player) {
         if (buyyed) {
             if (tile.build == null) {
                 tile.setNet(block, team, 0);
-                if (item != null) {
-                    itemTile.setNet(Blocks.itemSource, team, 0);
-                    Timer.schedule(() -> {
-                        itemTile.build.configure(item);
-                    }, 1.5f);
-                }
             }
         } else {
             StringBuilder lab = new StringBuilder();
 
             lab.append("[accent]cost: ").append(cost);
             lab.append("\n[white]").append(block.name);
-
-            for (Player player : Groups.player) {
-                if (player.team() == team) {
-                    Call.label(player.con, lab.toString(), SEC_TIMER * 10 / 60f, centreDrawx, centreDrawy - (block.size + 1) * 8);
-                }
-            }
+            Call.label(player.con, lab.toString(), SEC_TIMER * 10 / 60f, centreDrawx, centreDrawy - Vars.tilesize * (block.size + 1));
         }
-
     }
 
     @Override
     public void generate(Tiles tiles) {
-        int end = block.size + ((block.size == 2 || block.size == 4) ? 0 : -1);
-        int start = -1 + ((block.size == 1 || block.size == 3) ? -1 : 0);
+        int end = block.size + ((block.size == 2) ? 0 : -1);
+        int start = -1 + ((block.size == 1 || block.size == 3 || block.size == 4) ? -1 : 0);
         for (int xx = start; xx <= end; xx++) {
             for (int yy = start; yy <= end; yy++) {
                 Floor floor = (Floor) Blocks.metalFloor;
@@ -110,6 +108,5 @@ public class TurretRoom extends Room {
             }
         }
         tile = tiles.getn(x, y);
-        itemTile = tiles.getn(x, y + end);
     }
 }
