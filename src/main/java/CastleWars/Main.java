@@ -3,7 +3,7 @@ package CastleWars;
 import CastleWars.game.Logic;
 import CastleWars.logic.PlayerData;
 import CastleWars.logic.UnitCost;
-import CastleWars.logic.room.TurretRoom;
+import CastleWars.logic.room.*;
 import arc.Events;
 import arc.graphics.Color;
 import mindustry.Vars;
@@ -21,6 +21,7 @@ import mindustry.graphics.Pal;
 import arc.graphics.Colors;
 import arc.util.Strings;
 import mindustry.gen.Player;
+import arc.struct.*;
 
 public class Main extends Plugin {
 
@@ -93,6 +94,70 @@ public class Main extends Plugin {
 
     @Override
     public void registerClientCommands(CommandHandler handler) {
+        
+        handler.<Player>register("buy", "<unit/building>", "buy something", (args, player) -> {
+            args[0] = Strings.stripColors(args[0]);
+            
+            room: for (IntMap.Entry<Seq<Room>> entry : logic.rooms) {
+                
+                for (Room room : entry.value) {
+                    
+                    //could add extra method to room like is(String name)
+                    if (room instanceof UnitRoom) {
+                        if (((UnitRomm)room).unitType.name.equalsIgnoreCase(args[0])) {
+                            room.onTouch(logic.datas.find(p -> p.player.id == player.id));
+                            break room;
+                        }
+                    } else if (room instanceof TurretRoom) {
+                        if (((TurretRoom)room).block.name.equalsIgnoreCase(args[0])) {
+                            room.onTouch(logic.datas.find(p -> p.player.id == player.id));
+                            break room;
+                        }
+                    } else if (args[0].equalsIgnoreCase("miner") && room instanceof DrillRoom) {
+                        room.onTouch(logic.datas.find(p -> p.player.id == player.id));
+                        break room;
+                    } else if (room instanceof CoreRoom && args[0].equalsIgnoreCase(Blocks.coreNucleus.name)) {
+                        room.onTouch(logic.datas.find(p -> p.player.id == player.id));
+                        break room;
+                    }
+                }
+            }
+        });
+        
+        //useful if you need to defend but want some passive income although might become slightly laggy
+         handler.<Player>register("buyforever", "<unit/building/stop>", "buy something repeatedly until you run /buyforever stop", (args, player) -> {
+            args[0] = Strings.stripColors(args[0]);
+            Room room1 = null;
+            PlayerData data = logic.datas.find(p -> p.player.id == player.id)
+            
+            roomLoop: for (IntMap.Entry<Seq<Room>> entry : logic.rooms) {
+                
+                for (Room room : entry.value) {
+                    
+                    //could add extra method to room like is(String name)
+                    if (room instanceof UnitRoom) {
+                        if (((UnitRomm)room).unitType.name.equalsIgnoreCase(args[0])) {
+                            room1 = room;
+                            break roomLoop;
+                        }
+                    } else if (room instanceof TurretRoom) {
+                        if (((TurretRoom)room).block.name.equalsIgnoreCase(args[0])) {
+                            room1 = room;
+                            break roomLoop;
+                        }
+                    } else if (args[0].equalsIgnoreCase("miner") && room instanceof DrillRoom) {
+                        room1 = room;
+                        break roomLoop;
+                    } else if (room instanceof CoreRoom && args[0].equalsIgnoreCase(Blocks.coreNucleus.name)) {
+                        room1 = room;
+                        break roomLoop;
+                    }
+                }
+            }
+             
+             data.buying = Timer.schedule(() -> room.onTouch(data), 0f, 1f);
+        });
+        
         handler.<Player>register("info", "Info for Castle Wars", (args, player) -> {
             player.sendMessage("[lime]Defender[white] units defend the core.\n"
                     + "[scarlet]Attacker[white] units attack the [scarlet]enemy[white] team.\n"
