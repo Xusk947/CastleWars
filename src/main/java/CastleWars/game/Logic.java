@@ -22,6 +22,7 @@ import mindustry.gen.Unit;
 import mindustry.maps.Map;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
+import mindustry.content.UnitTypes;
 
 public class Logic {
 
@@ -73,8 +74,11 @@ public class Logic {
                 data.money += data.income;
             });
         }
-
-        for (PlayerData data : datas) {
+        
+        //only player loop in trigger.update
+        boolean label = interval.get(1, SEC_TIMER * 10);
+        for (int i = 0;i < datas.size; i++) {
+            PlayerData data = datas.get(i);
             StringBuilder hud = new StringBuilder();
             hud.append("[gray]Time left: ").append(Mathf.floor(endTimer / 60f)).append("\n");
             hud.append("[gold]Balance: ").append(data.money).append("\n");
@@ -85,29 +89,37 @@ public class Logic {
             }
             hud.append("Income: ").append(data.income);
             Call.setHudText(data.player.con, hud.toString());
-        }
-
-        for (IntMap.Entry<Seq<Room>> rooms1 : rooms) {
-            for (Room room : rooms1.value) {
-                room.update();
-                // Touch logic
-                for (PlayerData data : datas) {
-                    Player player = data.player;
-                    if (player.team() == room.team && player.unit() != null && room.rect(player.unit().aimX, player.unit().aimY) && player.unit().isShooting) {
+            
+            Player player = data.player;
+            
+            /*
+            touch logic
+            since rooms is constant in size its
+            better to loop the rooms inside playerdata loop
+            then loop playerdata inside rooms loop
+            */
+            for (IntMap.Entry<Seq<Room>> entry : rooms) {
+                
+                for (Room room : entry.value) {
+                    if (i == 0) {
+                        if (label) room.generateLabel(player);
+                        room.update();
+                    }
+                    
+                    if (player.team() == room.team && player.unit() != null && room.rect(player.mouseX, player.mouseY) && player.unit().isShooting) {
                         room.onTouch(data);
                     }
                 }
             }
-        }
-
-        if (interval.get(1, SEC_TIMER * 10)) {
-            for (PlayerData data : datas) {
-                for (IntMap.Entry<Seq<Room>> rooms1 : rooms) {
-                    for (Room room : rooms1.value) {
-                        if (room.team == data.player.team()) {
-                            room.generateLabel(data.player);
-                        }
-                    }
+            
+            if (player.unit() != null) {
+                if ((player.unit().type == UnitTypes.gamma || player.unit().type == UnitTypes.alpha) && player.team().core() != null) {
+                    Unit unit = UnitTypes.risso.create(Team.crux);
+                    unit.set(player.team().core().x, player.team().core().y + 4 * Vars.tilesize);
+                    unit.add();
+                    unit.team(player.team());
+                    unit.spawnedByCore = true;
+                    player.unit(unit);
                 }
             }
         }
