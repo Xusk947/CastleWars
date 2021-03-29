@@ -48,6 +48,7 @@ public class Logic {
         rules.teams.get(Team.sharded).cheat = true;
         rules.loadout.clear();
         rules.loadout.add(new ItemStack(Items.surgeAlloy, 99999), new ItemStack(Items.plastanium, 99999), new ItemStack(Items.blastCompound, 99999));
+        rules.fire = false;
         for (Block block : Vars.content.blocks()) {
             if (block != Blocks.thoriumWall && block != Blocks.thoriumWallLarge) {
                 rules.bannedBlocks.add(block);
