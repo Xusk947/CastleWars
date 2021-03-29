@@ -98,7 +98,7 @@ public class Main extends Plugin {
                     + "[scarlet]Attacker[white] units attack the [scarlet]enemy[white] team.\n"
                     + "Income is your money per second [scarlet]don't ever let it go negative.[white]\n"
                     + "Shoot at units to buy units.\n"
-                    + "Why can't I buy this unit? If your income is below the income of the unit you can't buy it.");
+                    + "Why can't I buy this unit? If your income is below the income of the unit and its a defender you can't buy it.");
         });
     }
 }
