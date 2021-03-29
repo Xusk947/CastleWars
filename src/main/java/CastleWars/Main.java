@@ -21,6 +21,7 @@ import mindustry.graphics.Pal;
 import arc.graphics.Colors;
 import arc.util.Strings;
 import mindustry.gen.Player;
+import mindustry.core.NetClient;
 
 public class Main extends Plugin {
 
@@ -105,18 +106,29 @@ public class Main extends Plugin {
                 return;
             }
 
-            //allows for extra output to the player
-            String name = null;
+            //playerddata
+            PlayerData give = null;
+            PlayerData remove = null;
             //only loop playerdata once instead of using .find twice
             for (PlayerData p : logic.datas) {
                 if (Strings.stripColors(p.player.name).equalsIgnoreCase(args[1])) {
-                    name = p.player.name;
-                    p.money += amount;
+                    give = p;
                 } else if (p.player == player) {
-                    p.money -= amount;
+                    remove = p;
                 }
             }
-            player.sendMessage(name != null ? "Successfully sent " + name + " $" + amount : "Could not find " + args[1]);
+            
+            if (give == null || remove == null) {
+                player.sendMessage("Could not find " + args[1]);
+            }
+            if (amount > remove.money) {
+                player.sendMessage("[scarlet]You do not have enough money to give " + NetClient.colorizeName(give.player.id, give.player.name) + "[white] " + amount);
+            }
+            
+            give.money += amount;
+            remove.money -= amount;
+            
+            player.sendMessage("Successfully sent " + NetClient.colorizeName(give.player.id, give.player.name) + "[white] " + amount);
         });
         handler.<Player>register("info", "Info for Castle Wars", (args, player) -> {
             player.sendMessage("[lime]Defender[white] units defend the core.\n"
