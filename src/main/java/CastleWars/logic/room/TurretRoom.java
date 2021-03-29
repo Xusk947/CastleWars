@@ -13,6 +13,7 @@ import mindustry.gen.Building;
 import mindustry.gen.Call;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
+import mindustry.net.Administration;
 import mindustry.type.Item;
 import mindustry.world.Block;
 import mindustry.world.Tile;
@@ -33,7 +34,7 @@ public class TurretRoom extends Room {
 
     public Block block;
     public Item item = null;
-    public Tile tile, itemTile;
+    public Tile tile;
     public boolean buyyed = false;
 
     public static void init() {
@@ -51,10 +52,10 @@ public class TurretRoom extends Room {
         
         if (Vars.netServer == null) {
             Timer.schedule(() -> {
-                Vars.netServer.admins.addActionFilter(action -> (action.type == Administration.ActionType.breakBlock || action.type == Administration.ActionType.placeBlock) && (action.tile != this.tile && action.tile != this.itemTile));
+                Vars.netServer.admins.addActionFilter(action -> (action.type == Administration.ActionType.breakBlock || action.type == Administration.ActionType.placeBlock) && (action.tile != this.tile));
             }, 5f);
         } else {
-            Vars.netServer.admins.addActionFilter(action -> (action.type == Administration.ActionType.breakBlock || action.type == Administration.ActionType.placeBlock) && (action.tile != this.tile && action.tile != this.itemTile));
+            Vars.netServer.admins.addActionFilter(action -> (action.type == Administration.ActionType.breakBlock || action.type == Administration.ActionType.placeBlock) && (action.tile != this.tile));
         }
     }
 
@@ -80,12 +81,6 @@ public class TurretRoom extends Room {
         if (buyyed) {
             if (tile.build == null) {
                 tile.setNet(block, team, 0);
-                if (item != null) {
-                    itemTile.setNet(Blocks.itemSource, team, 0);
-                    Timer.schedule(() -> {
-                        itemTile.build.configure(item);
-                    }, 1.5f);
-                }
             }
         } else {
             StringBuilder lab = new StringBuilder();
@@ -118,6 +113,5 @@ public class TurretRoom extends Room {
             }
         }
         tile = tiles.getn(x, y);
-        itemTile = tiles.getn(x, y + end);
     }
 }
