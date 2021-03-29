@@ -113,7 +113,7 @@ public class Main extends Plugin {
             for (PlayerData p : logic.datas) {
                 if (Strings.stripColors(p.player.name).equalsIgnoreCase(args[1])) {
                     give = p;
-                } else if (p.player == player) {
+                } else if (p.player.id == player.id) {
                     remove = p;
                 }
             }
