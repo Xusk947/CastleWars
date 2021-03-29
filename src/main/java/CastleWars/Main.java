@@ -48,8 +48,11 @@ public class Main extends Plugin {
                     }
                 }
             });
-            logic.update();
         });
+        
+        Timer.schedule(() -> {
+            logic.update();
+        }, 0, 0.25f);
 
         Events.on(EventType.PlayerJoin.class, event -> {
             logic.datas.add(new PlayerData(event.player));
