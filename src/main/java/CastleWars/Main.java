@@ -19,6 +19,7 @@ import mindustry.mod.Plugin;
 public class Main extends Plugin {
 
     Logic logic;
+    public static float INTERVAL = 0.25f;
 
     @Override
     public void init() {
@@ -52,7 +53,7 @@ public class Main extends Plugin {
         
         Timer.schedule(() -> {
             logic.update();
-        }, 0, 0.25f);
+        }, 0, INTERVAL);
 
         Events.on(EventType.PlayerJoin.class, event -> {
             logic.datas.add(new PlayerData(event.player));
