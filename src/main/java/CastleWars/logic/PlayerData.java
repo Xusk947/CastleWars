@@ -4,7 +4,7 @@ import mindustry.gen.Player;
 
 public class PlayerData {
 
-    public static int basicIncome = 1000;
+    public static int basicIncome = 20;
     public int money = 0;
     public int income = basicIncome;
     public Player player;

@@ -44,7 +44,7 @@ public class UnitRoom extends Room {
         new UnitRoom(-2 * PUDDLE, 2 * PUDDLE, UnitTypes.spiroct, ClassType.Attacker, 150, 1),
         new UnitRoom(-3 * PUDDLE, 2 * PUDDLE, UnitTypes.arkyid, ClassType.Attacker, 2200, 20),
         new UnitRoom(-1 * PUDDLE, 3 * PUDDLE, UnitTypes.bryde, ClassType.Attacker, 1200, 10),
-        new UnitRoom(-2 * PUDDLE, 3 * PUDDLE, UnitTypes.sei, ClassType.Defender, 5000, 45),
+        new UnitRoom(-2 * PUDDLE, 3 * PUDDLE, UnitTypes.sei, ClassType.Attacker, 5000, 45),
         new UnitRoom(-3 * PUDDLE, 0 * PUDDLE, UnitTypes.toxopid, ClassType.Attacker, 7000, 70),
         new UnitRoom(-1 * PUDDLE, -1 * PUDDLE, UnitTypes.pulsar, ClassType.Attacker, 200, 2),
         new UnitRoom(0, 2 * PUDDLE, UnitTypes.reign, ClassType.Attacker, 5000, 50),
