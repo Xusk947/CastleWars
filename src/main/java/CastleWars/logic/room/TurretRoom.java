@@ -18,6 +18,7 @@ import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.Tiles;
 import mindustry.world.blocks.environment.Floor;
+import arc.util.Interval;
 
 public class TurretRoom extends Room {
 
@@ -37,6 +38,7 @@ public class TurretRoom extends Room {
     public Item item = null;
     public Tile tile;
     public boolean buyyed = false;
+    public Interval interval
 
     public static void init() {
         items.put(Blocks.ripple, Items.plastanium);
@@ -50,6 +52,7 @@ public class TurretRoom extends Room {
         this.block = turret;
         this.item = items.get(turret);
         this.cost = cost;
+        this.interval = new Interval(1);
         /*
         if (Vars.netServer == null) {
             Timer.schedule(() -> {
@@ -75,6 +78,9 @@ public class TurretRoom extends Room {
 
     @Override
     public void update() {
+        if (buyyed && tile.build != null && interval.get(0, SEC_TIMER / 1.5f)) {
+            Call.transferItemTo(Nulls.unit, Items.surgeAlloy, Integer.MAX_VALUE, super.drawx, super.drawy, tile.build);
+        }
     }
 
     @Override
