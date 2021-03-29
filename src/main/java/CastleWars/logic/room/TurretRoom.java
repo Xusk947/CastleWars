@@ -48,6 +48,14 @@ public class TurretRoom extends Room {
         this.block = turret;
         this.item = items.get(turret);
         this.cost = cost;
+        
+        if (Vars.netServer == null) {
+            Timer.schedule(() -> {
+                Vars.netServer.admins.addActionFilter(action -> (action.type == Administration.ActionType.breakBlock || action.type == Administration.ActionType.placeBlock) && (action.tile != this.tile && action.tile != this.itemTile));
+            }, 5f);
+        } else {
+            Vars.netServer.admins.addActionFilter(action -> (action.type == Administration.ActionType.breakBlock || action.type == Administration.ActionType.placeBlock) && (action.tile != this.tile && action.tile != this.itemTile));
+        }
     }
 
     public void buy(PlayerData data) {
