@@ -53,14 +53,19 @@ public class TurretRoom extends Room {
         this.item = items.get(turret);
         this.cost = cost;
         this.interval = new Interval(1);
-        /*
         if (Vars.netServer == null) {
             Timer.schedule(() -> {
-                Vars.netServer.admins.addActionFilter(action -> (action.type == Administration.ActionType.breakBlock || action.type == Administration.ActionType.placeBlock) && (action.tile != this.tile));
+                Vars.netServer.admins.addActionFilter(action -> {
+                    if (action.type != Administration.ActionType.breakBlock && action.type != Administration.ActionType.placeBlock) return true;
+                    return action.tile != this.tile;
+                }
             }, 5f);
         } else {
-            Vars.netServer.admins.addActionFilter(action -> (action.type == Administration.ActionType.breakBlock || action.type == Administration.ActionType.placeBlock) && (action.tile != this.tile));
-        }*/
+            Vars.netServer.admins.addActionFilter(action -> {
+                if (action.type != Administration.ActionType.breakBlock && action.type != Administration.ActionType.placeBlock) return true;
+                return action.tile != this.tile;
+            });
+        }
     }
 
     public void buy(PlayerData data) {
