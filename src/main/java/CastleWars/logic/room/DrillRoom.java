@@ -33,7 +33,7 @@ public class DrillRoom extends Room {
         if (canBuy(data) && !buyyed) {
             buyyed = true;
             Vars.world.tile(x, y).setNet(Blocks.laserDrill, data.player.team(), 0);
-            Call.label("[lime]builded by:[white] " + data.player.name, 2, centreDrawx, centreDrawy);
+            Call.label("[lime]built by:[white] " + data.player.name, 2, centreDrawx, centreDrawy);
         }
     }
 
