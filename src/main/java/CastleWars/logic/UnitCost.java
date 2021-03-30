@@ -17,22 +17,22 @@ public class UnitCost {
     public static void init(Logic logicc) {
         logic = logicc;
         // Ground
-        cost.put(UnitTypes.dagger, 25);
-        cost.put(UnitTypes.mace, 70);
-        cost.put(UnitTypes.fortress, 170);
-        cost.put(UnitTypes.scepter, 1200);
+        cost.put(UnitTypes.dagger, 15);
+        cost.put(UnitTypes.mace, 50);
+        cost.put(UnitTypes.fortress, 150);
+        cost.put(UnitTypes.scepter, 1100);
         cost.put(UnitTypes.reign, 4000);
         // Support
-        cost.put(UnitTypes.nova, 30);
-        cost.put(UnitTypes.pulsar, 60);
+        cost.put(UnitTypes.nova, 25);
+        cost.put(UnitTypes.pulsar, 50);
         cost.put(UnitTypes.quasar, 100);
         cost.put(UnitTypes.vela, 500);
         cost.put(UnitTypes.corvus, 3000);
         // Spider
         cost.put(UnitTypes.crawler, 15);
-        cost.put(UnitTypes.atrax, 80);
-        cost.put(UnitTypes.spiroct, 120);
-        cost.put(UnitTypes.arkyid, 1500);
+        cost.put(UnitTypes.atrax, 60);
+        cost.put(UnitTypes.spiroct, 100);
+        cost.put(UnitTypes.arkyid, 1300);
         cost.put(UnitTypes.toxopid, 7000);
         
         Events.on(EventType.UnitDestroyEvent.class, event -> {
