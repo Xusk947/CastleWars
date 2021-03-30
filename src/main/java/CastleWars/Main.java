@@ -42,7 +42,7 @@ public class Main extends Plugin {
         TurretRoom.init();
 
         Events.run(EventType.Trigger.update, () -> {
-            Groups.unit.intersect(0, (Vars.world.height() * Vars.tilesize) / 2, Vars.world.width() * Vars.tilesize, 1, unit -> {
+            Groups.unit.intersect(-5, (Vars.world.height() * Vars.tilesize) / 2, (Vars.world.width() * Vars.tilesize) + 5, 1, unit -> {
                 if (unit.team.core() != null) {
                     unit.set(unit.team().data().core().x, unit.team().data().core().y + 4 * Vars.tilesize);
                     if (unit.isPlayer()) {
