@@ -34,6 +34,7 @@ public class DrillRoom extends Room {
             buyyed = true;
             Vars.world.tile(x, y).setNet(Blocks.laserDrill, data.player.team(), 0);
             Call.label("[lime]builded by:[white] " + data.player.name, 2, centreDrawx, centreDrawy);
+            data.money -= this.cost;
         }
     }
 
