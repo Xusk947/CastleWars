@@ -58,7 +58,7 @@ public class TurretRoom extends Room {
                 Vars.netServer.admins.addActionFilter(action -> {
                     if (action.type != Administration.ActionType.breakBlock && action.type != Administration.ActionType.placeBlock) return true;
                     return action.tile != this.tile;
-                }
+                });
             }, 5f);
         } else {
             Vars.netServer.admins.addActionFilter(action -> {
