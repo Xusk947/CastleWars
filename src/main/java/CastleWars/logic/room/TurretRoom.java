@@ -72,7 +72,7 @@ public class TurretRoom extends Room {
     public void onTouch(PlayerData data) {
         if (canBuy(data) && !buyyed) {
             buy(data);
-            Call.label("[lime]builded by:[white] " + data.player.name, 2, centreDrawx, centreDrawy);
+            Call.label("[lime]built by:[white] " + data.player.name, 2, centreDrawx, centreDrawy);
         }
     }
 
