@@ -47,7 +47,7 @@ public abstract class Room implements RoomComp {
 
     @Override
     public boolean canBuy(PlayerData data) {
-        return data.money - cost > 0;
+        return data.money - cost >= 0;
     }
 
     public enum ClassType {
