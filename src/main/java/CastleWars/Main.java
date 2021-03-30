@@ -61,7 +61,7 @@ public class Main extends Plugin {
             } else {
                 event.player.team(Team.sharded);
             }
-            Call.sendMessage(event.player.con, "You in: [#" + event.player.team().color.toString() + "]" + event.player.team().name + " [white]team", "[sky][Omni]", Nulls.player);
+            Call.sendMessage(event.player.con, "You're in: [#" + event.player.team().color.toString() + "]" + event.player.team().name + " [white]team", "[sky][Omni]", Nulls.player);
         });
 
         Events.on(EventType.PlayerLeave.class, event -> {
