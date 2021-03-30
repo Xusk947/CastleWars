@@ -50,19 +50,7 @@ public class Main extends Plugin {
                     }
                 };
             });
-
-            Groups.player.each(player -> {
-                if (player.unit() != null) {
-                    if ((player.unit().type == UnitTypes.gamma || player.unit().type == UnitTypes.alpha) && player.team().core() != null) {
-                        Unit unit = UnitTypes.risso.create(Team.crux);
-                        unit.set(player.team().core().x, player.team().core().y + 4 * Vars.tilesize);
-                        unit.add();
-                        unit.team(player.team());
-                        unit.spawnedByCore = true;
-                        player.unit(unit);
-                    }
-                }
-            });
+            
             logic.update();
         });
 
