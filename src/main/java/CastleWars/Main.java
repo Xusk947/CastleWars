@@ -4,6 +4,7 @@ import CastleWars.game.Logic;
 import CastleWars.logic.PlayerData;
 import CastleWars.logic.UnitCost;
 import CastleWars.logic.room.TurretRoom;
+import CastleWars.logic.CastleJavaScript;
 import arc.Events;
 import arc.graphics.Color;
 import mindustry.Vars;
@@ -40,6 +41,7 @@ public class Main extends Plugin {
         logic = new Logic();
         UnitCost.init(logic);
         TurretRoom.init();
+        CastleJavaScript.init(logic);
 
         Events.run(EventType.Trigger.update, () -> {
             Groups.unit.intersect(0, (Vars.world.height() * Vars.tilesize) / 2, Vars.world.width() * Vars.tilesize, 1, unit -> {
