@@ -168,7 +168,7 @@ public class Logic {
         for (Seq<Room> rooms1 : rooms.values()) {
             for (Room room : rooms1) {
                 if (room instanceof UnitRoom) {
-                    ((UnitRoom) room).spawn(2);
+                    ((UnitRoom) room).spawn();
                 }
             }
         }
