@@ -19,6 +19,7 @@ import mindustry.world.Tile;
 import mindustry.world.Tiles;
 import mindustry.world.blocks.environment.Floor;
 import arc.util.Interval;
+import mindustry.world.blocks.defense.turrets.Turret;
 
 public class TurretRoom extends Room {
 
@@ -78,8 +79,8 @@ public class TurretRoom extends Room {
 
     @Override
     public void update() {
-        if (buyyed && tile.build != null && interval.get(0, SEC_TIMER * 20)) {
-            Call.transferItemTo(Nulls.unit, Items.surgeAlloy, Integer.MAX_VALUE, super.drawx, super.drawy, tile.build);
+        if (buyyed && tile.build != null && interval.get(0, SEC_TIMER * 20) && item != null) {
+            if (this.tile.build instanceof Turret.TurretBuild) ((Turret.TurretBuild) this.tile.build).handleStack(this.item, Integer.MAX_VALUE, null);
         }
     }
 
