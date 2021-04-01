@@ -79,8 +79,8 @@ public class TurretRoom extends Room {
 
     @Override
     public void update() {
-        if (buyyed && tile.build != null && interval.get(0, SEC_TIMER * 20) && item != null) {
-            if (this.tile.build instanceof Turret.TurretBuild) ((Turret.TurretBuild) this.tile.build).handleStack(this.item, Integer.MAX_VALUE, null);
+        if (buyyed && tile.build != null && item != null && this.tile.build instanceof Turret.TurretBuild && interval.get(0, SEC_TIMER * 20)) {
+            ((Turret.TurretBuild) this.tile.build).handleStack(this.item, Integer.MAX_VALUE, null);
         }
     }
 
