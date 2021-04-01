@@ -56,7 +56,15 @@ public class Main extends Plugin {
 
         Events.on(EventType.PlayerJoin.class, event -> {
             logic.datas.add(new PlayerData(event.player));
-            if (Groups.player.count(p -> p.team() == Team.sharded) > Groups.player.count(p -> p.team() == Team.blue)) {
+            int blue = 0;
+            int sharded = 0;
+            
+            for (Player player : Groups.player) {
+                if (player.team() == Team.sharded) sharded++;
+                    else if (player.team() == Team.blue) blue++;
+            }
+            
+            if (sharded > blue) {
                 event.player.team(Team.blue);
             } else {
                 event.player.team(Team.sharded);
