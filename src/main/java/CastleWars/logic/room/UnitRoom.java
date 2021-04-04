@@ -84,7 +84,7 @@ public class UnitRoom extends Room {
         if (income > 0) {
             return data.money - cost >= 0;
         }
-        return data.income - income >= 0 && data.money - cost >= 0;
+        return data.income + income >= 0 && data.money - cost >= 0;
     }
 
     public void buy(PlayerData data) {
