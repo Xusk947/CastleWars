@@ -70,8 +70,12 @@ public class Generator implements Cons<Tiles> {
         Team[] t = new Team[]{Team.sharded, Team.blue};
 
         tiles.getn(sx, sy).setBlock(Blocks.coreShard, Team.sharded);
+        Building core = tiles.getn(sx, sy).build;
+        if (core != null) core.health = core.maxHealth;
 
         tiles.getn(bx, by).setBlock(Blocks.coreShard, Team.blue);
+        core = tiles.getn(bx, by).build;
+        if (core != null) core.health = core.maxHealth;
 
         Seq<Room> rm = new Seq<>();
         rm.addAll(UnitRoom.rooms);
