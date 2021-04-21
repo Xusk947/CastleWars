@@ -28,6 +28,8 @@ public class CoreRoom extends Room {
     public void onTouch(PlayerData data) {
         if (!buyyed && canBuy(data)) {
             if (data.player.team().core() != null) {
+                data.money -= this.cost;
+                
                 Tile tile = data.player.team().core().tile;
                 tile.setNet(Blocks.coreNucleus, data.player.team(), 0);
                 buyyed = true;
