@@ -149,6 +149,8 @@ public class Logic {
 
         Seq<Player> players = new Seq<>();
         Groups.player.copy(players);
+        //make player assignment somewhat random
+        players.shuffle()
 
         Vars.logic.reset();
         Call.worldDataBegin();
@@ -161,9 +163,17 @@ public class Logic {
 
         Vars.state.rules = rules.copy();
         Vars.logic.play();
-
-        for (Player player : players) {
+        
+        int assign = players.size / 2;
+        for (int i = 0;i < players.size;i++) {
+            Player player = players.get(i);
             Vars.netServer.sendWorldData(player);
+            
+            if (i <= assign) {
+                player.team(Team.sharded);
+            } else {
+                player.team(Team.blue);
+            }
         }
         for (Seq<Room> rooms1 : rooms.values()) {
             for (Room room : rooms1) {
