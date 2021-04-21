@@ -105,7 +105,7 @@ public class UnitRoom extends Room {
         }
     }
 
-    public void spawn(int sec) {
+    public void spawn() {
         Timer.schedule(() -> {
             Unit unit1 = unitType.spawn(team, team == Team.blue ? centreDrawx : centreDrawx, centreDrawy);
             unit1.health = 999999f;
