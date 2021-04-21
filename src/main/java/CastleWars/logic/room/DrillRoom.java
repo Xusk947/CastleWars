@@ -12,6 +12,7 @@ import mindustry.gen.Nulls;
 import mindustry.gen.Player;
 import mindustry.world.Tiles;
 import mindustry.world.blocks.environment.Floor;
+import mindustry.type.ItemStack;
 
 public class DrillRoom extends Room {
 
@@ -41,10 +42,7 @@ public class DrillRoom extends Room {
     @Override
     public void update() {
         if (buyyed && interval.get(0, 60f) && team.core() != null) {
-            Call.transferItemTo(Nulls.unit, Items.thorium, 4, drawx, drawy, team.core());
-            Call.transferItemTo(Nulls.unit, Items.blastCompound, 4, drawx, drawy, team.core());
-            Call.transferItemTo(Nulls.unit, Items.surgeAlloy, 4, drawx, drawy, team.core());
-            Call.transferItemTo(Nulls.unit, Items.plastanium, 4, drawx, drawy, team.core());
+            team.core().items.add(ItemStack.with(Items.thorium, 8, Items.blastCompound, 4, Items.surgeAlloy, 4, Items.plastanium, 4))
         }
     }
 
