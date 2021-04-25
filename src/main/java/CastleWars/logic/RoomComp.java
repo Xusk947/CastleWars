@@ -14,16 +14,26 @@ public interface RoomComp {
     public int x();
     public int y();
     
+    public int centrex();
+    public int centrey();
+    
     public int endx();
     public int endy();
     
     public float drawx();
     public float drawy();
     
+    public float centreDrawx();
+    public float centreDrawy();
+    
     public float endDrawx();
     public float endDrawy();
     
+    public String label();
+    
     public void buy(PlayerData data);
+    
+    public void update();
     
     default boolean canBuy(PlayerData data) {
         return data.money >= cost();
