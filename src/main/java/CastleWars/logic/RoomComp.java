@@ -40,16 +40,17 @@ public interface RoomComp {
     }
     
     default boolean check(float x, float y) {
-        return (x > x() && y > y() && x < endDrawx() && y < endDrawy());
+        return (x > drawx() && y > drawy() && x < endDrawx() && y < endDrawy());
     }
     
     default void spawn(Tiles t) {
         for (int x = 0; x <= size(); x++) {
             for (int y = 0; y <= size(); y++) {
+                if (t.getn(x + x(), y + y()).floor().equals(Blocks.metalFloor) || t.getn(x + x(), y + y()).floor().equals(Blocks.metalFloor5)) break;
                 if (x == 0 || y == 0 || x == size() || y == size()) {
-                    t.getn(x, y).setFloor((Floor) Blocks.metalFloor5);
+                    t.getn(x + x(), y + y()).setFloor((Floor) Blocks.metalFloor5);
                 } else {
-                    t.getn(x, y).setFloor((Floor) Blocks.metalFloor);
+                    t.getn(x + x(), y + y()).setFloor((Floor) Blocks.metalFloor);
                 }
             }
         }

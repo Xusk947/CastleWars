@@ -1,21 +1,31 @@
 package CastleWars.data;
 
 import CastleWars.logic.Room;
+import CastleWars.logic.TurretRoom;
 import arc.Events;
+import arc.graphics.Color;
+import arc.math.Mathf;
 import arc.struct.IntMap;
 import arc.util.Interval;
+import arc.util.Time;
+import arc.util.Timer;
+import mindustry.content.Fx;
+import mindustry.content.UnitTypes;
 import mindustry.game.EventType;
+import mindustry.game.Team;
 import mindustry.gen.Call;
 import mindustry.gen.Player;
+import mindustry.gen.Unit;
+import mindustry.gen.WaterMovec;
 
 public class PlayerData {
 
     public static IntMap<PlayerData> datas = new IntMap<PlayerData>();
     public static float MoneyInterval = 60f;
-    public static float LabelInterval = 60f * 10f;
+    public static float LabelInterval = 60f * 20f;
 
     public Player player;
-    public int money, income = 1;
+    public int money, income = 100;
     Interval interval;
 
     public PlayerData(Player player) {
@@ -29,12 +39,24 @@ public class PlayerData {
             money += income;
         }
         if (interval.get(1, LabelInterval)) {
-            labels(player);
+            //labels(player);
         }
         // For Room Rect
-        for (Room room : Room.rooms) {
-            if (room.check(player.mouseX, player.mouseY)) {
-
+        if (player.shooting && player.unit() != null) {
+            for (Room room : Room.rooms) {
+                if (room.check(player.unit().aimX, player.unit().aimY)) {
+                    if (room.canBuy(this)) {
+                        room.buy(this);
+                    }
+                }
+            }
+        }
+        // Set Unit ro risso :Ç
+        if (player.unit().spawnedByCore && !(player.unit() instanceof WaterMovec)) {
+            if (player.team().core() != null) {
+                Unit u =UnitTypes.risso.spawn(player.team(), player.team().core().x + 30, player.team().core().y + Mathf.random(-40, 40));
+                u.spawnedByCore = true;
+                player.unit(u);
             }
         }
 
@@ -48,6 +70,9 @@ public class PlayerData {
     public static void init() {
         Events.on(EventType.PlayerJoin.class, event -> {
             datas.put(event.player.id, new PlayerData(event.player));
+            Timer.schedule(() -> {
+                labels(event.player);
+            }, 1);
         });
 
         Events.on(EventType.PlayerLeave.class, event -> {
@@ -57,7 +82,19 @@ public class PlayerData {
 
     public static void labels(Player player) {
         for (Room room : Room.rooms) {
-            Call.label(player.con, room.label, LabelInterval / 60f, room.centreDrawy, room.centreDrawy);
+            if (room instanceof TurretRoom) {
+                if (((TurretRoom) (room)).team != player.team()) {
+                    continue;
+                }
+            }
+            if (room.labelVisible) {
+                Call.label(player.con, room.label, LabelInterval / 60f, room.centreDrawx, room.centreDrawy - room.size * 8 / 4);
+            }
         }
+    }
+
+    public void reset() {
+        this.income = 10;
+        this.money = 0;
     }
 }

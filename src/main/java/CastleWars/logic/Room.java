@@ -16,26 +16,27 @@ public abstract class Room implements RoomComp {
     public int x, y, centrex, centrey, endx, endy;
     public float drawx, drawy, centreDrawx, centreDrawy, endDrawx, endDrawy;
 
-
+    public boolean labelVisible = true;
     public int cost;
 
     public Room(int x, int y, int cost, int size) {
 
         this.cost = cost;
         this.size = size;
+        this.drawSize = size * Vars.tilesize;
 
         this.x = x;
         this.y = y;
-        this.centrex = x + size;
-        this.centrey = y + size;
+        this.centrex = x + size / 2;
+        this.centrey = y + size / 2;
         this.endx = x + size;
         this.endy = y + size;
         this.drawx = x * Vars.tilesize;
         this.drawy = y * Vars.tilesize;
-        this.centreDrawx = (x + size) * Vars.tilesize;
-        this.centreDrawy = (y + size) * Vars.tilesize;
-        this.endDrawx = endx * Vars.tilesize;
-        this.endDrawy = endy * Vars.tilesize;
+        this.centreDrawx = (x + size / 2) * Vars.tilesize;
+        this.centreDrawy = (y + size / 2) * Vars.tilesize;
+        this.endDrawx = drawx + drawSize;
+        this.endDrawy = drawy + drawSize;
     }
 
     public Room(int x, int y, int cost) {
@@ -89,7 +90,7 @@ public abstract class Room implements RoomComp {
 
     @Override
     public float endDrawx() {
-        return endDrawy;
+        return endDrawx;
     }
 
     @Override

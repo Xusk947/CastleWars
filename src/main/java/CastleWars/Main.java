@@ -7,30 +7,40 @@ import CastleWars.data.PlayerData;
 import CastleWars.game.Logic;
 import arc.Events;
 import mindustry.Vars;
-import mindustry.core.NetServer;
+import mindustry.content.Blocks;
 import mindustry.game.EventType;
 import mindustry.game.Rules;
 import mindustry.game.Team;
+import mindustry.world.Block;
 
 public class Main extends Plugin {
-    
+
     public static Rules rules;
     public Logic logic;
-    
+
     @Override
     public void init() {
         rules = new Rules();
-        rules.pvp = false;
+        rules.pvp = true;
         rules.canGameOver = false;
-        
+        rules.teams.get(Team.sharded).cheat = true;
+        rules.teams.get(Team.blue).cheat = true;
+        rules.waves = true;
+        for (Block block : Vars.content.blocks()) {
+            if (block == Blocks.thoriumWall || block == Blocks.thoriumWallLarge) {
+                continue;
+            }
+            rules.bannedBlocks.add(block);
+        }
+
         PlayerData.init();
         logic = new Logic();
-        
+
         Events.on(EventType.ServerLoadEvent.class, e -> {
             logic.restart();
             Vars.netServer.openServer();
         });
-        
+
         Events.run(EventType.Trigger.update, () -> {
             logic.update();
         });
