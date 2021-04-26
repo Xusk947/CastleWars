@@ -8,6 +8,7 @@ import mindustry.gen.Call;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import CastleWars.logic.Room;
+import arc.util.Log;
 import arc.util.Timer;
 import mindustry.content.Blocks;
 import mindustry.content.UnitTypes;
@@ -19,6 +20,7 @@ import mindustry.world.blocks.storage.CoreBlock;
 
 public class Logic {
 
+    public static Seq<Block> blocks = new Seq<>();
     public boolean worldLoaded = false;
     public float x = 0, y = 0, endx = 0, endy = 0;
     
@@ -55,14 +57,14 @@ public class Logic {
             if (block instanceof CoreBlock) {
                 continue;
             }
-            if (block != null) {
-                block.health = 999999999;
+            if (block != null && blocks.contains(block)) {
+                block.health = blocks.find(b -> b.equals(block)).health * 10;
             }
         }
         UnitTypes.omura.abilities.clear();
-        UnitTypes.crawler.defaultController = UnitTypes.fortress.defaultController;
         UnitTypes.mono.weapons.add(UnitTypes.crawler.weapons.get(0));
         Blocks.coreShard.unitCapModifier = 99999;
+        Blocks.itemSource.health = 999999;
         Blocks.coreNucleus.unitCapModifier = 99999;
         Room.rooms.clear();
 
@@ -90,9 +92,10 @@ public class Logic {
         Vars.logic.play();
         Vars.state.rules = Main.rules;
         Call.setRules(Vars.state.rules);
+        // AntiInstantGameStart
         Timer.schedule(() -> {
             worldLoaded = true;
-        }, 3);
+        }, 5);
     }
 
     public void gameOverUpdate() {

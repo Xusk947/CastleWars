@@ -20,7 +20,7 @@ public class PlayerData {
 
     public static IntMap<PlayerData> datas = new IntMap<PlayerData>();
     public static float MoneyInterval = 60f;
-    public static float LabelInterval = 60f * 20f;
+    public static float LabelInterval = 60f * 30f;
 
     public Player player;
     public int money, income = 10;
@@ -42,10 +42,11 @@ public class PlayerData {
         // For Room Rect
         if (player.shooting && player.unit() != null) {
             for (Room room : Room.rooms) {
-                if (room.check(player.unit().aimX, player.unit().aimY)) {
-                    if (room.canBuy(this)) {
-                        room.buy(this);
-                    }
+                if (room instanceof TurretRoom && !(((TurretRoom) room).team == player.team())) {
+                    continue;
+                }
+                if (room.check(player.unit().aimX, player.unit().aimY) && room.canBuy(this)) {
+                    room.buy(this);
                 }
             }
         }

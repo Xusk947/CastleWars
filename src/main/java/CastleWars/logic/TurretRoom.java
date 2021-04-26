@@ -2,6 +2,7 @@ package CastleWars.logic;
 
 import CastleWars.data.Icon;
 import CastleWars.data.PlayerData;
+import arc.util.Interval;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.content.Items;
@@ -15,6 +16,8 @@ public class TurretRoom extends Room {
 
     public boolean buyyed = false;
     public Team team;
+    Interval interval = new Interval(1);
+    float updateTime = 60f * 5f;
     Block block;
 
     public TurretRoom(Team team, Block block, int x, int y, int cost, int size) {
@@ -45,7 +48,7 @@ public class TurretRoom extends Room {
 
     @Override
     public void update() {
-        if (buyyed) {
+        if (buyyed && interval.get(0, updateTime)) {
             if (Vars.world.tile(centrex, centrey).build == null) {
                 Vars.world.tile(centrex, centrey).setNet(block, team, 0);
             }

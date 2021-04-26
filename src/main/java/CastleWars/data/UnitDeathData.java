@@ -34,6 +34,12 @@ public class UnitDeathData {
         cost.put(UnitTypes.bryde, 200);
         cost.put(UnitTypes.sei, 2000);
         cost.put(UnitTypes.omura, 5000);
+        // Spiders
+        cost.put(UnitTypes.crawler, 20);
+        cost.put(UnitTypes.atrax, 50);
+        cost.put(UnitTypes.spiroct, 150);
+        cost.put(UnitTypes.arkyid, 1300);
+        cost.put(UnitTypes.toxopid, 4500);
 
         // Air ?xd
         cost.put(UnitTypes.flare, 25);
@@ -43,7 +49,7 @@ public class UnitDeathData {
         cost.put(UnitTypes.eclipse, 5000);
 
         // Support Air | lol?
-        cost.put(UnitTypes.mono, 50);
+        cost.put(UnitTypes.mono, 20);
         cost.put(UnitTypes.poly, 100);
         cost.put(UnitTypes.mega, 300);
         cost.put(UnitTypes.quad, 1500);
@@ -61,8 +67,9 @@ public class UnitDeathData {
             if (cost.containsKey(event.unit.type)) {
                 for (PlayerData data : PlayerData.datas.values()) {
                     if (event.unit.team != data.player.team()) {
-                        data.money += get(event.unit.type);
-                        Call.label(data.player.con, "[lime]", 0.5f, event.unit.x, event.unit.y);
+                        int m = get(event.unit.type);
+                        data.money += m;
+                        Call.label(data.player.con, "[lime]" + m, 0.5f, event.unit.x, event.unit.y);
                     }
                 }
             }

@@ -2,6 +2,7 @@ package CastleWars.game;
 
 import CastleWars.Main;
 import CastleWars.logic.CoreRoom;
+import CastleWars.logic.ResourceRoom;
 import CastleWars.logic.Room;
 import CastleWars.logic.TurretRoom;
 import CastleWars.logic.UnitRoom;
@@ -10,6 +11,7 @@ import arc.struct.Seq;
 import arc.util.Timer;
 import mindustry.Vars;
 import mindustry.content.Blocks;
+import mindustry.content.Items;
 import mindustry.content.UnitTypes;
 import mindustry.game.Gamemode;
 import mindustry.game.Team;
@@ -28,7 +30,7 @@ public class Generator implements Cons<Tiles> {
 
     public Generator() {
         cores = new Seq<>();
-        
+
         Vars.world.loadMap(Vars.maps.getNextMap(Gamemode.pvp, Vars.state.map), Main.rules.copy());
         saved = Vars.world.tiles;
         width = saved.width;
@@ -77,10 +79,10 @@ public class Generator implements Cons<Tiles> {
                         t.getn(cx, cy).setNet(Blocks.coreShard, Team.sharded, 0);
                         t.getn(cx, cyy).setNet(Blocks.coreShard, Team.blue, 0);
                     }, 1);
-                    
+
                     cores.add(t.getn(x, y));
                     cores.add(t.getn(x, yy));
-                    
+
                     addCoreRoom(t.getn(x, y), yy);
                 }
                 // Turret Build
@@ -141,11 +143,29 @@ public class Generator implements Cons<Tiles> {
                 && tile.nearby(-1, 1).floor().equals(Blocks.darkPanel6)
                 && tile.nearby(1, -1).floor().equals(Blocks.darkPanel6)) {
             addTurret(Blocks.foreshadow, tile, yy, 4000, 5);
-        } // Cyclone
+        } // Spectre
+        else if (tile.nearby(1, 1).floor().equals(Blocks.darkPanel4)
+                && tile.nearby(-1, -1).floor().equals(Blocks.darkPanel4)
+                && tile.nearby(-1, 1).floor().equals(Blocks.darkPanel4)
+                && tile.nearby(1, -1).floor().equals(Blocks.darkPanel4)) {
+            addTurret(Blocks.spectre, tile, yy, 4000, 5);
+        } // MeltDown 
+        else if (tile.nearby(1, 1).floor().equals(Blocks.darkPanel6)
+                && tile.nearby(-1, -1).floor().equals(Blocks.darkPanel6)) {
+            addTurret(Blocks.meltdown, tile, yy, 4000, 5);
+        } // Cyclone        
         else if (tile.nearby(1, 1).floor().equals(Blocks.darkPanel4)
                 && tile.nearby(-1, -1).floor().equals(Blocks.darkPanel4)) {
             addTurret(Blocks.cyclone, tile, yy, 2600, 4);
-        } // Segment
+        } // Ripple
+        else if (tile.nearby(0, 1).floor().equals(Blocks.darkPanel4)
+                && tile.nearby(0, -1).floor().equals(Blocks.darkPanel4)) {
+            addTurret(Blocks.ripple, tile, yy, 2600, 4);
+        } // Fuse
+        else if (tile.nearby(1, 0).floor().equals(Blocks.darkPanel4)
+                && tile.nearby(-1, 0).floor().equals(Blocks.darkPanel4)) {
+            addTurret(Blocks.fuse, tile, yy, 2600, 4);
+        }// Segment
         else if (tile.nearby(0, 1).floor().equals(Blocks.darkPanel4)) {
             addTurret(Blocks.segment, tile, yy, 1400, 3);
         } // Lancer
@@ -164,8 +184,16 @@ public class Generator implements Cons<Tiles> {
         if (type != UnitTypes.nova && type != UnitTypes.dagger && type != UnitTypes.crawler) {
             Room.rooms.add(new UnitRoom(type, x, y + Room.ROOM_SIZE + 2, cost, -income, UnitRoom.Type.Defender));
         }
+        // Some Resource Room Why be not? xd
+        if (type == UnitTypes.nova) {
+            Room.rooms.add(new ResourceRoom(Items.plastanium, x, y + Room.ROOM_SIZE + 2, 350));
+        } else if (type == UnitTypes.dagger) {
+            Room.rooms.add(new ResourceRoom(Items.thorium, x, y + Room.ROOM_SIZE + 2, 250));
+        } else if (type == UnitTypes.crawler) {
+            Room.rooms.add(new ResourceRoom(Items.phaseFabric, x, y + Room.ROOM_SIZE + 2, 450));
+        }
     }
-    
+
     private void addCoreRoom(Tile tile, int yy) {
         Room.rooms.add(new CoreRoom(Team.sharded, tile.x - 2, tile.y - 2));
         Room.rooms.add(new CoreRoom(Team.blue, tile.x - 2, yy - 2));

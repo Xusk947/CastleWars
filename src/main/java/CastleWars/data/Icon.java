@@ -2,6 +2,7 @@ package CastleWars.data;
 
 import arc.struct.ObjectMap;
 import mindustry.content.Blocks;
+import mindustry.content.Items;
 import mindustry.content.UnitTypes;
 import mindustry.ctype.Content;
 import mindustry.gen.Iconc;
@@ -50,6 +51,10 @@ public class Icon {
         icons.put(Blocks.lancer, Iconc.blockLancer);
         icons.put(Blocks.swarmer, Iconc.blockSwarmer);
         icons.put(Blocks.salvo, Iconc.blockSalvo);
+        // Items
+        icons.put(Items.thorium, Iconc.itemThorium);
+        icons.put(Items.plastanium, Iconc.itemPlastanium);
+        icons.put(Items.phaseFabric, Iconc.itemPhaseFabric);
         // Some stuff xd
         icons.put(Blocks.duo, Iconc.defense);
         icons.put(Blocks.commandCenter, Iconc.units);
