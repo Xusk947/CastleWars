@@ -6,18 +6,20 @@ import arc.util.Interval;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.content.Items;
+import mindustry.content.Liquids;
 import mindustry.game.Team;
 import mindustry.gen.Call;
 import mindustry.type.Item;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
+import mindustry.world.blocks.defense.turrets.LaserTurret;
 
 public class TurretRoom extends Room {
 
     public boolean buyyed = false;
     public Team team;
     Interval interval = new Interval(1);
-    float updateTime = 60f * 5f;
+    float updateTime = 60f * 15f;
     Block block;
 
     public TurretRoom(Team team, Block block, int x, int y, int cost, int size) {
@@ -38,6 +40,9 @@ public class TurretRoom extends Room {
         if (block instanceof ItemTurret) {
             Vars.world.tile(x, centrey).setNet(Blocks.itemSource, team, 0);
             Vars.world.tile(x, centrey).build.configure(ammo(block));
+        } else if (block instanceof LaserTurret) {
+            Vars.world.tile(x, centrey).setNet(Blocks.liquidSource, team, 0);
+            Vars.world.tile(x, centrey).build.configure(Liquids.cryofluid);
         }
     }
 
@@ -54,15 +59,29 @@ public class TurretRoom extends Room {
             }
         }
     }
-    
+
     public static Item ammo(Block block) {
-        if (block == Blocks.foreshadow) return Items.surgeAlloy;
-        if (block == Blocks.cyclone) return Items.plastanium;
-        if (block == Blocks.ripple) return Items.blastCompound;
-        if (block == Blocks.spectre) return Items.thorium;
-        if (block == Blocks.fuse) return Items.thorium;
-        if (block == Blocks.swarmer) return Items.surgeAlloy;
-        if (block == Blocks.salvo) return Items.thorium;
+        if (block == Blocks.foreshadow) {
+            return Items.surgeAlloy;
+        }
+        if (block == Blocks.cyclone) {
+            return Items.plastanium;
+        }
+        if (block == Blocks.ripple) {
+            return Items.blastCompound;
+        }
+        if (block == Blocks.spectre) {
+            return Items.thorium;
+        }
+        if (block == Blocks.fuse) {
+            return Items.thorium;
+        }
+        if (block == Blocks.swarmer) {
+            return Items.surgeAlloy;
+        }
+        if (block == Blocks.salvo) {
+            return Items.thorium;
+        }
         return Items.copper;
     }
 }

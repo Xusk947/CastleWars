@@ -5,6 +5,7 @@ import CastleWars.data.PlayerData;
 import mindustry.gen.Call;
 import mindustry.gen.Nulls;
 import mindustry.type.Item;
+import mindustry.content.Items;
 
 public class ResourceRoom extends Room {
 
@@ -20,7 +21,10 @@ public class ResourceRoom extends Room {
     public void buy(PlayerData data) {
         data.money -= cost;
         if (data.player.team().core() != null) {
-            Call.transferItemTo(Nulls.unit, item, 96, centreDrawx, centreDrawy, data.player.team().core());
+            Call.transferItemTo(Nulls.unit, item, 80, centreDrawx, centreDrawy, data.player.team().core());
+            if (item == Items.plastanium) {
+                Call.transferItemTo(Nulls.unit, Items.metaglass, 24, centreDrawx, centreDrawy, data.player.team().core());
+            }
         }
     }
 

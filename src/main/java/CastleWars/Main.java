@@ -79,5 +79,6 @@ public class Main extends Plugin {
         handler.register("restart", "start new game", (t) -> {
             logic.restart();
         });
+        // Groups.player.each(p=>{Call.connect(p.con, "petruchio.org.ru", 6951)})   
     }
 }

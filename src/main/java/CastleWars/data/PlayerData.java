@@ -53,7 +53,7 @@ public class PlayerData {
         // Set Unit ro risso :Ç
         if (player.unit().spawnedByCore && !(player.unit() instanceof WaterMovec)) {
             if (player.team().core() != null) {
-                Unit u =UnitTypes.risso.spawn(player.team(), player.team().core().x + 30, player.team().core().y + Mathf.random(-40, 40));
+                Unit u = UnitTypes.risso.spawn(player.team(), player.team().core().x + 30, player.team().core().y + Mathf.random(-40, 40));
                 u.spawnedByCore = true;
                 player.unit(u);
             }
@@ -70,9 +70,14 @@ public class PlayerData {
         Events.on(EventType.PlayerJoin.class, event -> {
             datas.put(event.player.id, new PlayerData(event.player));
             Vars.netServer.assignTeam(event.player, Groups.player);
-            Timer.schedule(() -> {
-                labels(event.player);
-            }, 1);
+            if (Groups.player.size() >= 1) {
+                if (Groups.player.size() == 1) {
+                    labels(Groups.player.index(0));
+                }
+                Timer.schedule(() -> {
+                    labels(event.player);
+                }, 1);
+            }
         });
 
         Events.on(EventType.PlayerLeave.class, event -> {

@@ -23,11 +23,11 @@ public class Logic {
     public static Seq<Block> blocks = new Seq<>();
     public boolean worldLoaded = false;
     public float x = 0, y = 0, endx = 0, endy = 0;
-    
+
     Seq<Tile> cores = new Seq<>();
 
     public void update() {
-        if (Vars.state.isPaused()) {
+        if (Vars.state.isPaused() || !worldLoaded) {
         } else {
             for (PlayerData data : PlayerData.datas.values()) {
                 data.update();
@@ -72,16 +72,18 @@ public class Logic {
 
         Generator gen = new Generator();
         gen.run();
-        cores = gen.cores.copy();
+        Timer.schedule(() -> {
+            cores = gen.cores.copy();
+        }, 2);
         Call.worldDataBegin();
-        
+
         int half = gen.height - (Room.ROOM_SIZE * 6);
         half = half / 2;
         y = half * Vars.tilesize;
         endy = (Room.ROOM_SIZE * 6) * Vars.tilesize;
         x = -5 * Vars.tilesize;
         endx = (5 + gen.width) * Vars.tilesize;
-        
+
         for (Player player : players) {
             Vars.netServer.assignTeam(player, players);
             Vars.netServer.sendWorldData(player);

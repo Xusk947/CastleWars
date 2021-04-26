@@ -116,7 +116,7 @@ public class Generator implements Cons<Tiles> {
         // Support 
         cx += 2;
         addUnit(UnitTypes.nova, cx + Padding * 5, cy + 2, 60, 0);
-        addUnit(UnitTypes.pulsar, cx + Padding * 6, cy + 2, 100, 1);
+        addUnit(UnitTypes.pulsar, cx + Padding * 6, cy + 2, 120, 1);
         addUnit(UnitTypes.quasar, cx + Padding * 7, cy + 2, 400, 4);
         addUnit(UnitTypes.vela, cx + Padding * 8, cy + 2, 2000, 20);
         addUnit(UnitTypes.corvus, cx + Padding * 9, cy + 2, 8000, 80);
@@ -129,10 +129,10 @@ public class Generator implements Cons<Tiles> {
         addUnit(UnitTypes.toxopid, cx + Padding * 4, cy + 2 + Padding * 2, 9000, 90);
         // Naval 
         cx += 2;
-        addUnit(UnitTypes.risso, cx + Padding * 5, cy + 2 + Padding * 2, 110, 1);
-        addUnit(UnitTypes.minke, cx + Padding * 6, cy + 2 + Padding * 2, 200, 2);
-        addUnit(UnitTypes.bryde, cx + Padding * 7, cy + 2 + Padding * 2, 400, 4);
-        addUnit(UnitTypes.sei, cx + Padding * 8, cy + 2 + Padding * 2, 3000, 30);
+        addUnit(UnitTypes.risso, cx + Padding * 5, cy + 2 + Padding * 2, 250, 2);
+        addUnit(UnitTypes.minke, cx + Padding * 6, cy + 2 + Padding * 2, 350, 3);
+        addUnit(UnitTypes.bryde, cx + Padding * 7, cy + 2 + Padding * 2, 800, 8);
+        addUnit(UnitTypes.sei, cx + Padding * 8, cy + 2 + Padding * 2, 3500, 32);
         addUnit(UnitTypes.omura, cx + Padding * 9, cy + 2 + Padding * 2, 10000, 100);
     }
 
@@ -148,29 +148,29 @@ public class Generator implements Cons<Tiles> {
                 && tile.nearby(-1, -1).floor().equals(Blocks.darkPanel4)
                 && tile.nearby(-1, 1).floor().equals(Blocks.darkPanel4)
                 && tile.nearby(1, -1).floor().equals(Blocks.darkPanel4)) {
-            addTurret(Blocks.spectre, tile, yy, 4000, 5);
+            addTurret(Blocks.spectre, tile, yy, 3000, 5);
         } // MeltDown 
         else if (tile.nearby(1, 1).floor().equals(Blocks.darkPanel6)
                 && tile.nearby(-1, -1).floor().equals(Blocks.darkPanel6)) {
-            addTurret(Blocks.meltdown, tile, yy, 4000, 5);
+            addTurret(Blocks.meltdown, tile, yy, 2500, 5);
         } // Cyclone        
         else if (tile.nearby(1, 1).floor().equals(Blocks.darkPanel4)
                 && tile.nearby(-1, -1).floor().equals(Blocks.darkPanel4)) {
-            addTurret(Blocks.cyclone, tile, yy, 2600, 4);
+            addTurret(Blocks.cyclone, tile, yy, 1300, 4);
         } // Ripple
         else if (tile.nearby(0, 1).floor().equals(Blocks.darkPanel4)
                 && tile.nearby(0, -1).floor().equals(Blocks.darkPanel4)) {
-            addTurret(Blocks.ripple, tile, yy, 2600, 4);
+            addTurret(Blocks.ripple, tile, yy, 1700, 4);
         } // Fuse
         else if (tile.nearby(1, 0).floor().equals(Blocks.darkPanel4)
                 && tile.nearby(-1, 0).floor().equals(Blocks.darkPanel4)) {
-            addTurret(Blocks.fuse, tile, yy, 2600, 4);
+            addTurret(Blocks.fuse, tile, yy, 750, 4);
         }// Segment
         else if (tile.nearby(0, 1).floor().equals(Blocks.darkPanel4)) {
             addTurret(Blocks.segment, tile, yy, 1400, 3);
         } // Lancer
         else if (tile.nearby(-1, -1).floor().equals(Blocks.darkPanel4)) {
-            addTurret(Blocks.lancer, tile, yy, 700, 3);
+            addTurret(Blocks.lancer, tile, yy, 350, 3);
         }
     }
 

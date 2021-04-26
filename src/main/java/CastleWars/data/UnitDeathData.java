@@ -15,31 +15,31 @@ public class UnitDeathData {
         cost = new ObjectMap<>();
 
         // Ground
-        cost.put(UnitTypes.dagger, 25);
-        cost.put(UnitTypes.mace, 50);
-        cost.put(UnitTypes.fortress, 150);
-        cost.put(UnitTypes.scepter, 1000);
-        cost.put(UnitTypes.reign, 3000);
+        cost.put(UnitTypes.dagger, 40);
+        cost.put(UnitTypes.mace, 72);
+        cost.put(UnitTypes.fortress, 250);
+        cost.put(UnitTypes.scepter, 1200);
+        cost.put(UnitTypes.reign, 3500);
 
         // GroundSupport
-        cost.put(UnitTypes.nova, 35);
-        cost.put(UnitTypes.pulsar, 50);
-        cost.put(UnitTypes.quasar, 200);
+        cost.put(UnitTypes.nova, 50);
+        cost.put(UnitTypes.pulsar, 80);
+        cost.put(UnitTypes.quasar, 300);
         cost.put(UnitTypes.vela, 1000);
-        cost.put(UnitTypes.corvus, 4000);
+        cost.put(UnitTypes.corvus, 6000);
 
         // Naval
-        cost.put(UnitTypes.risso, 50);
-        cost.put(UnitTypes.minke, 100);
-        cost.put(UnitTypes.bryde, 200);
-        cost.put(UnitTypes.sei, 2000);
-        cost.put(UnitTypes.omura, 5000);
+        cost.put(UnitTypes.risso, 75);
+        cost.put(UnitTypes.minke, 150);
+        cost.put(UnitTypes.bryde, 300);
+        cost.put(UnitTypes.sei, 2500);
+        cost.put(UnitTypes.omura, 6500);
         // Spiders
         cost.put(UnitTypes.crawler, 20);
-        cost.put(UnitTypes.atrax, 50);
+        cost.put(UnitTypes.atrax, 80);
         cost.put(UnitTypes.spiroct, 150);
         cost.put(UnitTypes.arkyid, 1300);
-        cost.put(UnitTypes.toxopid, 4500);
+        cost.put(UnitTypes.toxopid, 5000);
 
         // Air ?xd
         cost.put(UnitTypes.flare, 25);
@@ -49,7 +49,7 @@ public class UnitDeathData {
         cost.put(UnitTypes.eclipse, 5000);
 
         // Support Air | lol?
-        cost.put(UnitTypes.mono, 20);
+        cost.put(UnitTypes.mono, 50);
         cost.put(UnitTypes.poly, 100);
         cost.put(UnitTypes.mega, 300);
         cost.put(UnitTypes.quad, 1500);
@@ -66,7 +66,7 @@ public class UnitDeathData {
         Events.on(EventType.UnitDestroyEvent.class, event -> {
             if (cost.containsKey(event.unit.type)) {
                 for (PlayerData data : PlayerData.datas.values()) {
-                    if (event.unit.team != data.player.team()) {
+                    if (event.unit.team != data.player.team() && !event.unit.spawnedByCore) {
                         int m = get(event.unit.type);
                         data.money += m;
                         Call.label(data.player.con, "[lime]" + m, 0.5f, event.unit.x, event.unit.y);

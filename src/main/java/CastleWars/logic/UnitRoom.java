@@ -75,9 +75,8 @@ public class UnitRoom extends Room {
     }
 
     @Override
-    public boolean canBuy(PlayerData data
-    ) {
-        return super.canBuy(data) && data.income - income >= 0;
+    public boolean canBuy(PlayerData data) {
+        return super.canBuy(data) && (income > 0 || data.income - income >= 0);
     }
 
     @Override
