@@ -23,7 +23,7 @@ public class Main extends Plugin {
     @Override
     public void init() {
         rules = new Rules();
-        rules.pvp = false;
+        rules.pvp = true;
         rules.canGameOver = false;
         rules.teams.get(Team.sharded).cheat = true;
         rules.teams.get(Team.blue).cheat = true;
