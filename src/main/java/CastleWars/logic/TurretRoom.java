@@ -1,11 +1,9 @@
 package CastleWars.logic;
 
+import CastleWars.data.Icon;
 import CastleWars.data.PlayerData;
-import arc.graphics.Color;
-import arc.util.Time;
 import mindustry.Vars;
 import mindustry.content.Blocks;
-import mindustry.content.Fx;
 import mindustry.content.Items;
 import mindustry.game.Team;
 import mindustry.gen.Call;
@@ -24,7 +22,7 @@ public class TurretRoom extends Room {
         this.team = team;
         this.block = block;
 
-        label = "[gray]Turret: [white]" + block.name + "\n[gold]Cost: [white]" + cost;
+        label = Icon.get(block) + " :[white] " + cost;
     }
 
     @Override
@@ -54,7 +52,7 @@ public class TurretRoom extends Room {
         }
     }
     
-    public Item ammo(Block block) {
+    public static Item ammo(Block block) {
         if (block == Blocks.foreshadow) return Items.surgeAlloy;
         if (block == Blocks.cyclone) return Items.plastanium;
         if (block == Blocks.ripple) return Items.blastCompound;

@@ -3,17 +3,15 @@ package CastleWars.data;
 import CastleWars.logic.Room;
 import CastleWars.logic.TurretRoom;
 import arc.Events;
-import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.struct.IntMap;
 import arc.util.Interval;
-import arc.util.Time;
 import arc.util.Timer;
-import mindustry.content.Fx;
+import mindustry.Vars;
 import mindustry.content.UnitTypes;
 import mindustry.game.EventType;
-import mindustry.game.Team;
 import mindustry.gen.Call;
+import mindustry.gen.Groups;
 import mindustry.gen.Player;
 import mindustry.gen.Unit;
 import mindustry.gen.WaterMovec;
@@ -39,7 +37,7 @@ public class PlayerData {
             money += income;
         }
         if (interval.get(1, LabelInterval)) {
-            //labels(player);
+            labels(player);
         }
         // For Room Rect
         if (player.shooting && player.unit() != null) {
@@ -70,6 +68,7 @@ public class PlayerData {
     public static void init() {
         Events.on(EventType.PlayerJoin.class, event -> {
             datas.put(event.player.id, new PlayerData(event.player));
+            Vars.netServer.assignTeam(event.player, Groups.player);
             Timer.schedule(() -> {
                 labels(event.player);
             }, 1);

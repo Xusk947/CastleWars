@@ -1,6 +1,5 @@
 package CastleWars.logic;
 
-import CastleWars.data.PlayerData;
 import arc.struct.Seq;
 import mindustry.Vars;
 
