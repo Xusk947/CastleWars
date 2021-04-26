@@ -12,7 +12,7 @@ import arc.util.Timer;
 import mindustry.content.Blocks;
 import mindustry.content.UnitTypes;
 import mindustry.game.Team;
-import mindustry.gen.Unit;
+import mindustry.gen.Nulls;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.storage.CoreBlock;
@@ -20,6 +20,8 @@ import mindustry.world.blocks.storage.CoreBlock;
 public class Logic {
 
     public boolean worldLoaded = false;
+    public float x = 0, y = 0, endx = 0, endy = 0;
+    
     Seq<Tile> cores = new Seq<>();
 
     public void update() {
@@ -32,12 +34,13 @@ public class Logic {
             for (Room room : Room.rooms) {
                 room.update();
             }
-            
-            for (Unit unit : Groups.unit) {
-                if (unit.tileOn().equals(Blocks.space)) {
-                    unit.kill();
+            // Kill all units in centre
+            Groups.unit.intersect(x, y, endx, endy, u -> {
+                if (u.isPlayer()) {
+                    u.getPlayer().unit(Nulls.unit);
                 }
-            }
+                u.kill();
+            });
         }
         gameOverUpdate();
     }
@@ -69,7 +72,14 @@ public class Logic {
         gen.run();
         cores = gen.cores.copy();
         Call.worldDataBegin();
-
+        
+        int half = gen.height - (Room.ROOM_SIZE * 6);
+        half = half / 2;
+        y = half * Vars.tilesize;
+        endy = (Room.ROOM_SIZE * 6) * Vars.tilesize;
+        x = -5 * Vars.tilesize;
+        endx = (5 + gen.width) * Vars.tilesize;
+        
         for (Player player : players) {
             Vars.netServer.assignTeam(player, players);
             Vars.netServer.sendWorldData(player);

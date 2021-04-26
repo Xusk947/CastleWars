@@ -23,7 +23,7 @@ public class PlayerData {
     public static float LabelInterval = 60f * 20f;
 
     public Player player;
-    public int money, income = 100;
+    public int money, income = 10;
     Interval interval;
 
     public PlayerData(Player player) {
