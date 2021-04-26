@@ -21,9 +21,9 @@ public class ResourceRoom extends Room {
     public void buy(PlayerData data) {
         data.money -= cost;
         if (data.player.team().core() != null) {
-            Call.transferItemTo(Nulls.unit, item, 80, centreDrawx, centreDrawy, data.player.team().core());
+            Call.transferItemTo(Nulls.unit, item, 96, centreDrawx, centreDrawy, data.player.team().core());
             if (item == Items.plastanium) {
-                Call.transferItemTo(Nulls.unit, Items.metaglass, 24, centreDrawx, centreDrawy, data.player.team().core());
+                Call.transferItemTo(Nulls.unit, Items.metaglass, 28, centreDrawx, centreDrawy, data.player.team().core());
             }
         }
     }
