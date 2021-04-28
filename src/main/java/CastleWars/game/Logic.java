@@ -2,8 +2,10 @@ package CastleWars.game;
 
 import CastleWars.Main;
 import CastleWars.data.PlayerData;
+import arc.Events;
 import arc.struct.Seq;
 import mindustry.Vars;
+import mindustry.game.EventType;
 import mindustry.gen.Call;
 import mindustry.gen.Groups;
 import mindustry.gen.Player;
@@ -26,25 +28,31 @@ public class Logic {
 
     Seq<Tile> cores = new Seq<>();
 
-    public void update() {
-        if (Vars.state.isPaused() || !worldLoaded) {
-        } else {
-            for (PlayerData data : PlayerData.datas.values()) {
-                data.update();
-            }
+    public Logic() {
+        Events.on(EventType.BlockDestroyEvent.class, e -> {
+            if (!(e.tile.build instanceof CoreBlock.CoreBuild) || e.tile.build.team.cores().size > 1) return;
 
-            for (Room room : Room.rooms) {
-                room.update();
-            }
-            // Kill all units in centre
-            Groups.unit.intersect(x, y, endx, endy, u -> {
-                if (u.isPlayer()) {
-                    u.getPlayer().unit(Nulls.unit);
-                }
-                u.kill();
-            });
+            if (e.tile.build.team == Team.sharded) gameOver(Team.blue);
+            else gameOver(Team.sharded);
+        });
+    }
+
+    public void update() {
+        if (Vars.state.isPaused() || !worldLoaded) return;
+        for (PlayerData data : PlayerData.datas.values()) {
+            data.update();
         }
-        gameOverUpdate();
+
+        for (Room room : Room.rooms) {
+            room.update();
+        }
+        // Kill all units in centre
+        Groups.unit.intersect(x, y, endx, endy, u -> {
+            if (u.isPlayer()) {
+                u.getPlayer().unit(Nulls.unit);
+            }
+            u.kill();
+        });
     }
 
     public void restart() {
@@ -98,27 +106,6 @@ public class Logic {
         Timer.schedule(() -> {
             worldLoaded = true;
         }, 5);
-    }
-
-    public void gameOverUpdate() {
-        if (!worldLoaded) {
-            return;
-        }
-        int s = 0, b = 0;
-        for (Tile core : cores) {
-            if (core.build != null) {
-                if (core.build.team == Team.sharded) {
-                    s++;
-                } else if (core.build.team == Team.blue) {
-                    b++;
-                }
-            }
-        }
-        if (s == 0) {
-            gameOver(Team.blue);
-        } else if (b == 0) {
-            gameOver(Team.sharded);
-        }
     }
 
     public void gameOver(Team team) {
