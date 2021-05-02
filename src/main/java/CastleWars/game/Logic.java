@@ -29,6 +29,7 @@ public class Logic {
     Seq<Tile> cores = new Seq<>();
 
     public Logic() {
+
         Events.on(EventType.BlockDestroyEvent.class, e -> {
             if (!(e.tile.build instanceof CoreBlock.CoreBuild) || e.tile.build.team.cores().size > 1 || !worldLoaded) return;
 
