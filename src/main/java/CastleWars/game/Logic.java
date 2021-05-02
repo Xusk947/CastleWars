@@ -30,7 +30,7 @@ public class Logic {
 
     public Logic() {
         Events.on(EventType.BlockDestroyEvent.class, e -> {
-            if (!(e.tile.build instanceof CoreBlock.CoreBuild) || e.tile.build.team.cores().size > 1) return;
+            if (!(e.tile.build instanceof CoreBlock.CoreBuild) || e.tile.build.team.cores().size > 1 || !worldLoaded) return;
 
             if (e.tile.build.team == Team.sharded) gameOver(Team.blue);
             else gameOver(Team.sharded);
