@@ -48,7 +48,7 @@ public class TurretRoom extends Room {
 
     @Override
     public boolean canBuy(PlayerData data) {
-        return super.canBuy(data) && !buyyed;
+        return super.canBuy(data) && (!buyyed || Vars.world.build(centrex, centrey) == null);
     }
 
     @Override
