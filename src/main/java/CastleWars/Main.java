@@ -14,6 +14,7 @@ import mindustry.game.EventType;
 import mindustry.game.Rules;
 import mindustry.game.Team;
 import mindustry.world.Block;
+import mindustry.world.blocks.storage.CoreBlock;
 
 public class Main extends Plugin {
 
@@ -43,7 +44,14 @@ public class Main extends Plugin {
         logic = new Logic();
 
         Events.on(EventType.ServerLoadEvent.class, e -> {
-            Logic.blocks = Vars.content.blocks().copy();
+            Vars.content.blocks().each(b -> {
+                if (b instanceof CoreBlock) return;
+
+                if (b != null) {
+                    b.health = b.health * 10;
+                }
+            });
+
             logic.restart();
             Vars.netServer.openServer();
         });

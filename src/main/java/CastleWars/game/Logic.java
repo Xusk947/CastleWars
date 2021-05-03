@@ -62,14 +62,6 @@ public class Logic {
 
         Vars.logic.reset();
 
-        for (Block block : Vars.content.blocks()) {
-            if (block instanceof CoreBlock) {
-                continue;
-            }
-            if (block != null && blocks.contains(block)) {
-                block.health = blocks.find(b -> b.equals(block)).health * 10;
-            }
-        }
         UnitTypes.omura.abilities.clear();
         UnitTypes.mono.weapons.add(UnitTypes.crawler.weapons.get(0));
         Blocks.coreShard.unitCapModifier = 99999;
