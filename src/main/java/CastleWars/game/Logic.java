@@ -22,7 +22,6 @@ import mindustry.world.blocks.storage.CoreBlock;
 
 public class Logic {
 
-    public static Seq<Block> blocks = new Seq<>();
     public boolean worldLoaded = false;
     public float x = 0, y = 0, endx = 0, endy = 0;
 
