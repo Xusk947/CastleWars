@@ -51,6 +51,7 @@ public class Main extends Plugin {
                     b.health = b.health * 10;
                 }
             });
+            Vars.content.units().each(u -> u.canBoost = false);
 
             logic.restart();
             Vars.netServer.openServer();
