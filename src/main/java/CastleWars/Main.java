@@ -2,6 +2,7 @@ package CastleWars;
 
 import CastleWars.data.Icon;
 import arc.util.CommandHandler;
+import arc.util.Time;
 import mindustry.mod.Plugin;
 import mindustry.gen.Player;
 import CastleWars.data.PlayerData;
@@ -29,6 +30,8 @@ public class Main extends Plugin {
         rules.teams.get(Team.sharded).cheat = true;
         rules.teams.get(Team.blue).cheat = true;
         rules.waves = true;
+        rules.waveTimer = false;
+        rules.waveSpacing = 30 * Time.toMinutes;
 
         for (Block block : Vars.content.blocks()) {
             if (block == Blocks.thoriumWall || block == Blocks.thoriumWallLarge || block == Blocks.plastaniumWall || block == Blocks.plastaniumWallLarge || block == Blocks.phaseWall || block == Blocks.phaseWallLarge) {
