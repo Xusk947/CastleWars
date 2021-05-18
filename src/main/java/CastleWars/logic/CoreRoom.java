@@ -1,5 +1,6 @@
 package CastleWars.logic;
 
+import CastleWars.data.PlayerData;
 import mindustry.content.Blocks;
 import mindustry.game.Team;
 
@@ -13,4 +14,8 @@ public class CoreRoom extends TurretRoom{
     public void update() {
     }
 
+    @Override
+    public boolean canBuy(PlayerData data) {
+        return data.money >= cost() && !buyyed;
+    }
 }

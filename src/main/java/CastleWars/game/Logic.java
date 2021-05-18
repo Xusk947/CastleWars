@@ -22,15 +22,15 @@ import mindustry.world.blocks.storage.CoreBlock;
 
 public class Logic {
 
-    public static Seq<Block> blocks = new Seq<>();
     public boolean worldLoaded = false;
     public float x = 0, y = 0, endx = 0, endy = 0;
 
     Seq<Tile> cores = new Seq<>();
 
     public Logic() {
+
         Events.on(EventType.BlockDestroyEvent.class, e -> {
-            if (!(e.tile.build instanceof CoreBlock.CoreBuild) || e.tile.build.team.cores().size > 1) return;
+            if (!(e.tile.build instanceof CoreBlock.CoreBuild) || e.tile.build.team.cores().size > 1 || !worldLoaded) return;
 
             if (e.tile.build.team == Team.sharded) gameOver(Team.blue);
             else gameOver(Team.sharded);
@@ -61,14 +61,6 @@ public class Logic {
 
         Vars.logic.reset();
 
-        for (Block block : Vars.content.blocks()) {
-            if (block instanceof CoreBlock) {
-                continue;
-            }
-            if (block != null && blocks.contains(block)) {
-                block.health = blocks.find(b -> b.equals(block)).health * 10;
-            }
-        }
         UnitTypes.omura.abilities.clear();
         UnitTypes.mono.weapons.add(UnitTypes.crawler.weapons.get(0));
         Blocks.coreShard.unitCapModifier = 99999;

@@ -2,6 +2,7 @@ package CastleWars;
 
 import CastleWars.data.Icon;
 import arc.util.CommandHandler;
+import arc.util.Time;
 import mindustry.mod.Plugin;
 import mindustry.gen.Player;
 import CastleWars.data.PlayerData;
@@ -14,6 +15,7 @@ import mindustry.game.EventType;
 import mindustry.game.Rules;
 import mindustry.game.Team;
 import mindustry.world.Block;
+import mindustry.world.blocks.storage.CoreBlock;
 
 public class Main extends Plugin {
 
@@ -28,6 +30,8 @@ public class Main extends Plugin {
         rules.teams.get(Team.sharded).cheat = true;
         rules.teams.get(Team.blue).cheat = true;
         rules.waves = true;
+        rules.waveTimer = false;
+        rules.waveSpacing = 30 * Time.toMinutes;
 
         for (Block block : Vars.content.blocks()) {
             if (block == Blocks.thoriumWall || block == Blocks.thoriumWallLarge || block == Blocks.plastaniumWall || block == Blocks.plastaniumWallLarge || block == Blocks.phaseWall || block == Blocks.phaseWallLarge) {
@@ -43,7 +47,15 @@ public class Main extends Plugin {
         logic = new Logic();
 
         Events.on(EventType.ServerLoadEvent.class, e -> {
-            Logic.blocks = Vars.content.blocks().copy();
+            Vars.content.blocks().each(b -> {
+                if (b instanceof CoreBlock) return;
+
+                if (b != null) {
+                    b.health = b.health * 10;
+                }
+            });
+            Vars.content.units().each(u -> u.canBoost = false);
+
             logic.restart();
             Vars.netServer.openServer();
         });
